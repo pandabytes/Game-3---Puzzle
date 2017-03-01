@@ -1,2 +1,3 @@
-# Game-3---Puzzle
-Game 3!!!!!!!
+# Game-3: Puzzle Quest 
+
+This game is done in Unity.
