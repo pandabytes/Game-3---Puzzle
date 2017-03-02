@@ -4,9 +4,9 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-	public void LoadPlayScene()
+	public void LoadFirstStageScene()
 	{
-		SceneManager.LoadScene ("Main");
+		SceneManager.LoadScene ("FirstStage");
 	}
 
 	/// <summary>

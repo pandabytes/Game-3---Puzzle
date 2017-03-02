@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{3EED8614-044B-145A-5DBA-51C5BF828CAA}</ProjectGuid>
+    <ProjectGuid>{A7C30451-E29D-109C-692F-BFC2A982877A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -48,13 +48,27 @@
   <ItemGroup>
      <Compile Include="Assets\GE Common Assets\GE Touch Joystick\CrossPlatformInput\Scripts\Editor\CrossPlatformInputInitialize.cs" />
      <Compile Include="Assets\GE Common Assets\GE Touch Joystick\CrossPlatformInput\Scripts\Editor\InputAxisScrollbarCI.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Density\Hill.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Density\InverseHill.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Density\Island.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Surface\EnableStatic.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Textures\DensityNormal.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Textures\FaceNormal.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Textures\FractalAndDensityNormal.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Vegetation\Plants.cs" />
+     <Compile Include="Assets\TinyTerrain\Editor\Vegetation\Vegetation.cs" />
      <None Include="Assets\Fantasy Skybox FREE\Readme.txt" />
+     <None Include="Assets\TinyTerrain\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Fantasy Skybox FREE\Fog and Ambient reference.txt" />
      <None Include="Assets\Resources\Materials\Outlined-Silhouette Only.shader" />
+     <None Include="Assets\TinyTerrain\Standard Assets\Water\Shaders\FXWaterPro.shader" />
      <None Include="Assets\GUI Animator\GUI Animator FREE\Readme.txt" />
+     <None Include="Assets\TinyTerrain\README.txt" />
      <None Include="Assets\GE Common Assets\Readme.txt" />
      <None Include="Assets\Resources\Materials\test.shader" />
      <None Include="Assets\GUI Animator\GUI Animator FREE\!How to.txt" />
+     <None Include="Assets\Fonts\License - READ THIS.txt" />
+     <None Include="Assets\TinyTerrain\Materials\TerrainSurface.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -104,10 +118,10 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
  <Reference Include="GETween">
- <HintPath>C:/Users/Huy/Desktop/UCI/2016-2017/Winter 2017/ICS 161/Puzzle/Assets/GUI Animator/Common/Plugins/GETween.dll</HintPath>
+ <HintPath>C:/Users/Huy/Desktop/UCI/2016-2017/Winter 2017/ICS 161/Project 3 - 44681348/PuzzleGame/Puzzle Quest - Characters and UI/Assets/GUI Animator/Common/Plugins/GETween.dll</HintPath>
  </Reference>
  <Reference Include="GUIAnimatorFREE">
- <HintPath>C:/Users/Huy/Desktop/UCI/2016-2017/Winter 2017/ICS 161/Puzzle/Assets/GUI Animator/GUI Animator FREE/Plugins/GUIAnimatorFREE.dll</HintPath>
+ <HintPath>C:/Users/Huy/Desktop/UCI/2016-2017/Winter 2017/ICS 161/Project 3 - 44681348/PuzzleGame/Puzzle Quest - Characters and UI/Assets/GUI Animator/GUI Animator FREE/Plugins/GUIAnimatorFREE.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -118,12 +132,15 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="TinyTerrain">
+ <HintPath>C:/Users/Huy/Desktop/UCI/2016-2017/Winter 2017/ICS 161/Project 3 - 44681348/PuzzleGame/Puzzle Quest - Characters and UI/Assets/TinyTerrain/Editor/TinyTerrain.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{A978CC9A-7491-7253-286F-63E1E9E5B875}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{41F32D00-4949-AF6A-C1DE-13CE200B889C}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript.unityproj">
-      <Project>{B60910FB-3676-B905-FB00-9235F40D32EE}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
+      <Project>{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

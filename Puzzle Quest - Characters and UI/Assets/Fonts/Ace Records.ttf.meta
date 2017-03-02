@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c231934b12bad094bba57128b6d8f8e9
+timeCreated: 1488414387
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Ace Records
+  fontNames:
+  - Ace Records
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

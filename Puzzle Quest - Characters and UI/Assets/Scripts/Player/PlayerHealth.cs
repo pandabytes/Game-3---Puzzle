@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour
 	/// <summary>
 	/// Full health
 	/// </summary>
-	public float fullHealth;
+	private float fullHealth;
 
 	/// <summary>
 	/// The current health.
@@ -42,6 +42,11 @@ public class PlayerHealth : MonoBehaviour
 	/// Flash this image when damage.
 	/// </summary>
 	public Image damageImage;
+
+	/// <summary>
+	/// The healing aura.
+	/// </summary>
+	public GameObject healingAura;
 
 	#endregion
 
@@ -75,9 +80,9 @@ public class PlayerHealth : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () 
-	{
-		if (currentHealth > 0.0f && !isDamaged && !(anim.IsPlaying ("Attack") || anim.IsPlaying ("Damage") || anim.IsPlaying ("Walk")))
-			anim.Play ("Wait");
+	{		
+		if (Input.GetKeyDown (KeyCode.H))
+			HealPlayer (Constants.HealAmount);
 		
 		if (isDamaged)
 		{
@@ -101,6 +106,27 @@ public class PlayerHealth : MonoBehaviour
 		healthBar.transform.localScale = new Vector3 (scaledDamage, y, z);	
 	}
 
+	/// <summary>
+	/// Heal player coroutine.
+	/// </summary>
+	/// <returns>The player coroutine.</returns>
+	/// <param name="healAmount">Heal amount.</param>
+	private IEnumerator HealPlayerCoroutine(float healAmount)
+	{
+		healingAura.SetActive (!healingAura.activeSelf);
+		healingAura.transform.GetChild(0).gameObject.GetComponent<ParticleSystem> ().Play ();
+
+		currentHealth = (currentHealth + healAmount >= fullHealth) ? fullHealth : currentHealth + healAmount;
+		float scaledHealAmount = currentHealth / fullHealth;
+		SetHealth (scaledHealAmount);
+
+		// Turn off healing aura after 3 seconds
+		yield return new WaitForSeconds (3.0f);
+		healingAura.transform.GetChild(0).gameObject.GetComponent<ParticleSystem> ().Stop();
+		yield return new WaitForSeconds (2.0f);
+		healingAura.SetActive (!healingAura.activeSelf);
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -111,20 +137,31 @@ public class PlayerHealth : MonoBehaviour
 	/// <param name="damage">Damage amount.</param>
 	public void ReceiveDamage(float damage)
 	{
-		isDamaged = true;
-		anim.Stop ();
-		anim.Play ("Damage");
-
-		currentHealth = (currentHealth - damage < 0.0f) ? 0.0f : currentHealth - damage;
-		float scaledDamage = currentHealth / fullHealth;
-		SetHealth (scaledDamage);
-
 		if (currentHealth <= 0)
 		{
 			anim.Stop ();
 			anim.Play ("Dead");
 			OnPlayerDeath (this, EventArgs.Empty);
 		}
+		else
+		{
+			isDamaged = true;
+			anim.Stop ();
+			anim.Play ("Damage");
+
+			currentHealth = (currentHealth - damage < 0.0f) ? 0.0f : currentHealth - damage;
+			float scaledDamage = currentHealth / fullHealth;
+			SetHealth (scaledDamage);
+		}
+	}
+
+	/// <summary>
+	/// Heal the player with a certain amount of HP.
+	/// </summary>
+	/// <param name="healAmount">Heal amount.</param>
+	public void HealPlayer(float healAmount)
+	{
+		StartCoroutine (HealPlayerCoroutine (healAmount));
 	}
 
 	#endregion

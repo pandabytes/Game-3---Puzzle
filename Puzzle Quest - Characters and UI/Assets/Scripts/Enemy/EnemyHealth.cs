@@ -29,14 +29,14 @@ public class EnemyHealth : MonoBehaviour
 	private Animation anim;
 
 	/// <summary>
-	/// The model.
+	/// The model in which contains the material to be changed when damage.
 	/// </summary>
 	public GameObject model;
 
 	/// <summary>
 	/// The damage color of the enemy.
 	/// </summary>
-	public Color damageColor;
+	private Color damageColor;
 
 	/// <summary>
 	/// The original material of the enemy.
@@ -119,17 +119,49 @@ public class EnemyHealth : MonoBehaviour
 	/// <param name="damage">Damage.</param>
 	public void ReceiveDamage(float damage)
 	{
-		anim.Stop ();
-		anim.Play ("Damage");
-		StartCoroutine (ReceiveDamageCoroutine (damage));
+		if (currentHealth > 0.0f)
+		{
+			anim.Stop ();
+			anim.Play ("Damage");
+			StartCoroutine (ReceiveDamageCoroutine (damage));
+		}
 
 		if (currentHealth <= 0.0f)
 		{
+			// Stop attacking and play the dead animation
+			CancelInvoke ();
 			anim.Stop ();
 			anim.Play ("Dead");
-			CancelInvoke ();
+
+			// Notify the game manager that this enemy has been defeated
+			OnEnemyDefeated (this, EventArgs.Empty);
+
+			gameObject.SetActive (false);
+			StopCoroutine (ReceiveDamageCoroutine (damage));
 		}
 	}
 
 	#endregion
+
+	#region Public Events
+
+	/// <summary>
+	/// Occurs when enemy is defeated.
+	/// </summary>
+	public event EventHandler EnemyDefeated;
+
+	/// <summary>
+	/// Raises the enemy defeated event.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">Event data.</param>
+	protected virtual void OnEnemyDefeated(object sender, EventArgs e)
+	{
+		if (EnemyDefeated != null)
+		{
+			EnemyDefeated (sender, e);
+		}
+	}
+
+	#endregion 
 }
