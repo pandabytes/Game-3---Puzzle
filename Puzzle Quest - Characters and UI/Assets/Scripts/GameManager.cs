@@ -7,6 +7,11 @@ public class GameManager : MonoBehaviour
 	#region Member Variables
 
 	/// <summary>
+	/// Indicate if enemy is dead.
+	/// </summary>
+	private bool isEnemyDead;
+
+	/// <summary>
 	/// Indicate if it's the player's turn
 	/// </summary>
 	public bool isPlayerTurn;
@@ -22,15 +27,23 @@ public class GameManager : MonoBehaviour
 	public GameObject enemy;
 
 	/// <summary>
-	/// The portal game object.
+	/// The chest.
 	/// </summary>
-	public GameObject portal;
+	public GameObject chest;
+
+	/// <summary>
+	/// The user interface manager.
+	/// </summary>
+	public UIManager uiManager;
 
 	#endregion
+
+	#region Private Methods
 
 	// Use this for initialization
 	void Start ()
 	{
+		isEnemyDead = false;
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth> ();
 		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);
 	}
@@ -38,6 +51,23 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if (isEnemyDead)
+		{
+			chest.SetActive (true);
+		}
+	}
+
+	/// <summary>
+	/// The coroutine when the enemy dies.
+	/// </summary>
+	/// <returns>.</returns>
+	private IEnumerator EnemyDefeatedCoroutine()
+	{
+		isEnemyDead = true;
+		chest.SetActive (true);
+
+		yield return new WaitForSeconds (3.0f);
+		uiManager.EnablePopUpWindow ();
 	}
 
 	/// <summary>
@@ -48,7 +78,9 @@ public class GameManager : MonoBehaviour
 	/// <param name="e">E.</param>
 	private void EnemyDefeatedHandler(object sender, EventArgs e)
 	{
-
+		isEnemyDead = true;
+		StartCoroutine (EnemyDefeatedCoroutine ());
 	}
-}
 
+	#endregion
+}

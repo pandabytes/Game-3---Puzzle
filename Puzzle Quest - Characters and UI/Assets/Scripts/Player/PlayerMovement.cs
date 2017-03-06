@@ -4,6 +4,8 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
+	#region Member Variables
+
 	/// <summary>
 	/// The player health.
 	/// </summary>
@@ -30,6 +32,11 @@ public class PlayerMovement : MonoBehaviour
 	private bool isInMotion;
 
 	/// <summary>
+	/// Indicate if the enemy is dead.
+	/// </summary>
+	private bool isEnemyDead;
+
+	/// <summary>
 	/// The enemy object.
 	/// </summary>
 	public GameObject enemy;
@@ -45,9 +52,13 @@ public class PlayerMovement : MonoBehaviour
 	public GameManager gameManager;
 
 	/// <summary>
-	/// The portal.
+	/// The chest.
 	/// </summary>
-	public GameObject portal;
+	public GameObject chest;
+
+	#endregion
+
+	#region Public Getters and Setters
 
 	/// <summary>
 	/// Gets or sets a value indicating whether this instance is in motion.
@@ -59,6 +70,9 @@ public class PlayerMovement : MonoBehaviour
 		set { isInMotion = value; }
 	}
 
+	#endregion
+
+	#region Private Methods
 
 	// Use this for initialization
 	void Start ()
@@ -68,17 +82,16 @@ public class PlayerMovement : MonoBehaviour
 		startPosition = transform.position;
 
 		isInMotion = false;
+		isEnemyDead = false;
 		enemyHealth = enemy.GetComponent<EnemyHealth> ();
-		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (portal.activeSelf)
+		if (isEnemyDead)
 		{
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, portal.transform.position, step);
+			anim.Play ("Walk");
 			return;
 		}
 
@@ -124,16 +137,6 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Handler for enemy defeated event.
-	/// Activate the portal when the enemy is defeated.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	private void EnemyDefeatedHandler(object sender, EventArgs e)
-	{
-		portal.SetActive (true);
-		portal.GetComponent<ParticleSystem> ().Play ();
-	}
+	#endregion
 }
 

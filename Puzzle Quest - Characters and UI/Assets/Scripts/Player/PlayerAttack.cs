@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DigitalRuby;
 
 public class PlayerAttack : MonoBehaviour 
 {
@@ -32,11 +33,6 @@ public class PlayerAttack : MonoBehaviour
 		playerMovement = gameObject.GetComponent<PlayerMovement> ();
 	}
 
-	void Update()
-	{
-		
-	}
-
 	/// <summary>
 	/// THe coroutine of physical attack.
 	/// </summary>
@@ -50,7 +46,12 @@ public class PlayerAttack : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
-		enemyHealth.ReceiveDamage (Constants.PhysicalDamage);
+		SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
+
+		if (slimeHealth != null)
+			slimeHealth.ReceiveDamage (Constants.PhysicalDamage);
+		else
+			enemyHealth.ReceiveDamage (Constants.PhysicalDamage);
 	}
 
 	/// <summary>
@@ -60,13 +61,12 @@ public class PlayerAttack : MonoBehaviour
 	/// <param name="other">Other.</param>
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "Enemy" && gameManager.isPlayerTurn)
-		{			
+		if (other.gameObject.tag == "Enemy" && gameManager.isPlayerTurn && playerMovement.IsInMotion)
+		{		
 			playerMovement.IsInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine (other.gameObject));
 		}
 	}
-		
 
 	#endregion
 }

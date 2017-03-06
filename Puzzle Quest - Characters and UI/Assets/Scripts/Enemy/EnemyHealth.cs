@@ -11,12 +11,12 @@ public class EnemyHealth : MonoBehaviour
 	/// <summary>
 	/// Full health
 	/// </summary>
-	private float fullHealth;
+	protected float fullHealth;
 
 	/// <summary>
 	/// The current health.
 	/// </summary>
-	private float currentHealth;
+	protected float currentHealth;
 
 	/// <summary>
 	/// Reference to healthBar object
@@ -36,7 +36,7 @@ public class EnemyHealth : MonoBehaviour
 	/// <summary>
 	/// The damage color of the enemy.
 	/// </summary>
-	private Color damageColor;
+	protected Color damageColor;
 
 	/// <summary>
 	/// The original material of the enemy.
@@ -83,7 +83,7 @@ public class EnemyHealth : MonoBehaviour
 	/// Sets the health.
 	/// </summary>
 	/// <param name="scaledDamage">Scaled damage.</param>
-	private void SetHealth(float scaledDamage)
+	protected virtual void SetHealth(float scaledDamage)
 	{
 		float y = healthBar.transform.localScale.y;
 		float z = healthBar.transform.localScale.z;
@@ -95,7 +95,7 @@ public class EnemyHealth : MonoBehaviour
 	/// </summary>
 	/// <returns>The damage coroutine.</returns>
 	/// <param name="damage">Damage amount.</param>
-	private IEnumerator ReceiveDamageCoroutine(float damage)
+	protected virtual IEnumerator ReceiveDamageCoroutine(float damage)
 	{
 		// Set to damage color
 		model.GetComponent<Renderer> ().material.color = damageColor;
@@ -117,7 +117,7 @@ public class EnemyHealth : MonoBehaviour
 	/// Receives the damage.
 	/// </summary>
 	/// <param name="damage">Damage.</param>
-	public void ReceiveDamage(float damage)
+	public virtual void ReceiveDamage(float damage)
 	{
 		if (currentHealth > 0.0f)
 		{
@@ -128,8 +128,7 @@ public class EnemyHealth : MonoBehaviour
 
 		if (currentHealth <= 0.0f)
 		{
-			// Stop attacking and play the dead animation
-			CancelInvoke ();
+			// Play the dead animation
 			anim.Stop ();
 			anim.Play ("Dead");
 
