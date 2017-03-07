@@ -85,9 +85,9 @@ namespace DigitalRuby.PyroParticles
 				SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
 
 				if (slimeHealth != null)
-					slimeHealth.ReceiveDamage (Constants.FireDamage);
+					slimeHealth.ReceiveDamage (Constants.FireBallDamage);
 				else
-					enemyHealth.ReceiveDamage (Constants.FireDamage);
+					enemyHealth.ReceiveDamage (Constants.FireBallDamage);
 			}
 
             // destroy particle systems after a slight delay

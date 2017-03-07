@@ -137,13 +137,7 @@ public class PlayerHealth : MonoBehaviour
 	/// <param name="damage">Damage amount.</param>
 	public void ReceiveDamage(float damage)
 	{
-		if (currentHealth <= 0)
-		{
-			anim.Stop ();
-			anim.Play ("Dead");
-			OnPlayerDeath (this, EventArgs.Empty);
-		}
-		else
+		if (currentHealth > 0.0f)
 		{
 			isDamaged = true;
 			anim.Stop ();
@@ -152,6 +146,13 @@ public class PlayerHealth : MonoBehaviour
 			currentHealth = (currentHealth - damage < 0.0f) ? 0.0f : currentHealth - damage;
 			float scaledDamage = currentHealth / fullHealth;
 			SetHealth (scaledDamage);
+		}
+
+		if (currentHealth <= 0.0f)
+		{
+			anim.Stop ();
+			anim.Play ("Dead");
+			OnPlayerDeath (this, EventArgs.Empty);
 		}
 	}
 

@@ -19,22 +19,22 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// The player object.
 	/// </summary>
-	private GameObject player;
+	protected GameObject player;
 
 	/// <summary>
 	/// The player health.
 	/// </summary>
-	private PlayerHealth playerHealth;
+	protected PlayerHealth playerHealth;
 
 	/// <summary>
 	/// The start position of enemy.
 	/// </summary>
-	private Vector3 startPosition;
+	protected Vector3 startPosition;
 
 	/// <summary>
 	/// Flag indicate whether enemy is in motion (aka moving).
 	/// </summary>
-	private bool isInMotion;
+	protected bool isInMotion;
 
 	/// <summary>
 	/// The animation component of the enemy.
@@ -77,7 +77,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// Enables enemy attack.
 	/// </summary>
-	private void EnableAttack()
+	protected void EnableAttack()
 	{
 		isInMotion = true;
 	}
@@ -85,7 +85,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// Begin the attack process.
 	/// </summary>
-	private void Attack()
+	protected void Attack()
 	{
 		MoveTowardToPlayer ();
 		ResetToStartPosition ();	
@@ -94,7 +94,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// Move toward to the player.
 	/// </summary>
-	private void MoveTowardToPlayer()
+	protected virtual void MoveTowardToPlayer()
 	{
 		if (isInMotion)
 		{
@@ -108,7 +108,7 @@ public class EnemyAttack : MonoBehaviour
 	/// Reset the character to its orignal starting position after an attack.
 	/// Move back to start position every frame.
 	/// </summary>
-	private void ResetToStartPosition()
+	protected virtual void ResetToStartPosition()
 	{
 		if (!anim.IsPlaying("Attack") && !isInMotion && transform.position != startPosition)
 		{
@@ -118,11 +118,11 @@ public class EnemyAttack : MonoBehaviour
 	}
 
 	/// <summary>
-	/// THe coroutine of physical attack.
+	/// The coroutine of physical attack.
 	/// </summary>
 	/// <returns>The attack coroutine.</returns>
 	/// <param name="player">player.</param>
-	IEnumerator PhysicalAttackCoroutine()
+	protected virtual IEnumerator PhysicalAttackCoroutine()
 	{
 		isInMotion = false;
 		anim.Stop ();
@@ -139,8 +139,9 @@ public class EnemyAttack : MonoBehaviour
 	/// <param name="other">Other.</param>
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "Player" && !gameManager.isPlayerTurn)
+		if (other.gameObject.tag == "Player" && !gameManager.isPlayerTurn && isInMotion)
 		{
+			isInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine ());
 		}
 		else if (other.gameObject.tag == "Shield" && !gameManager.isPlayerTurn)
@@ -156,7 +157,7 @@ public class EnemyAttack : MonoBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void PlayerDeathHandler(object sender, EventArgs e)
+	protected void PlayerDeathHandler(object sender, EventArgs e)
 	{
 		CancelInvoke ();
 	}

@@ -60,6 +60,13 @@ public class UIManager : MonoBehaviour
 			case (StageEnum.SecondStage):
 				message.text = Constants.EarthSpikeMessage;
 				break;
+			case (StageEnum.ThirdStage):
+				message.text = Constants.IceShardMessage;
+				break;
+			case (StageEnum.FourthStage):
+				break;
+			case(StageEnum.FiftheStage):
+				break;
 		}
 	}
 

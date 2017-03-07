@@ -16,12 +16,17 @@ public static class Constants
 	/// <summary>
 	/// The physical damage.
 	/// </summary>
-	public const float PhysicalDamage = 50.0f;
+	public const float PhysicalDamage = 10.0f;
 
 	/// <summary>
-	/// The fire damage.
+	/// The fire ball damage.
 	/// </summary>
-	public const float FireDamage = 17.6f;
+	public const float FireBallDamage = 17.6f;
+
+	/// <summary>
+	/// The earth spike damage.
+	/// </summary>
+	public const float EarthSpikeDamage = 17.6f;
 
 	#endregion
 

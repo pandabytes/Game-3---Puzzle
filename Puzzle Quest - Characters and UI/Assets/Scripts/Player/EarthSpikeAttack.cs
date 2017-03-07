@@ -23,50 +23,38 @@ public class EarthSpikeAttack : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Raises the rocks.
+	/// </summary>
+	/// <returns>The rocks.</returns>
 	private IEnumerator RaiseRocks()
 	{
 		Animation anim_1 = rock_1.GetComponent<Animation> ();
 		Animation anim_2 = rock_2.GetComponent<Animation> ();
+		Animation anim_3 = rock_3.GetComponent<Animation> ();
+		Animation anim_4 = rock_4.GetComponent<Animation> ();
 
 		anim_1.Play ("Rise_1");
-		yield return new WaitForSeconds (1.0f);
+		yield return new WaitForSeconds (0.4f);
 		anim_1.Play ("Drop_1");
 
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.1f);
 
 		anim_2.Play ("Rise_2");
-		yield return new WaitForSeconds (1.0f);
+		yield return new WaitForSeconds (0.4f);
 		anim_2.Play ("Drop_2");
-	}
 
-	private IEnumerator RaiseRocksCoroutine()
-	{
-		Rise (rock_1);
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.1f);
 
-		Drop (rock_1);
-		Rise (rock_2);
-		yield return new WaitForSeconds (0.5f);
+		anim_3.Play ("Rise_3");
+		yield return new WaitForSeconds (0.4f);
+		anim_3.Play ("Drop_3");
 
-		Drop (rock_2);
-		Rise (rock_3);
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.1f);
 
-		Drop (rock_3);
-		Rise (rock_4);
-		yield return new WaitForSeconds (0.5f);
-
-		Drop (rock_4);
-	}
-
-	private void Rise(GameObject rock)
-	{
-		rock.transform.Translate (5.5f * Vector3.up);
-	}
-
-	private void Drop(GameObject rock)
-	{
-		rock.transform.Translate (5.5f * Vector3.down);
+		anim_4.Play ("Rise_4");
+		yield return new WaitForSeconds (0.4f);
+		anim_4.Play ("Drop_4");
 	}
 }
 
