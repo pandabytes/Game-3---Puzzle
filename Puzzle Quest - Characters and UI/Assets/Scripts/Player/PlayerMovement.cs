@@ -56,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
 	/// </summary>
 	public GameObject chest;
 
+	/// <summary>
+	/// The player input.
+	/// </summary>
+	public PlayerInput playerInput;
+
 	#endregion
 
 	#region Public Getters and Setters
@@ -84,6 +89,8 @@ public class PlayerMovement : MonoBehaviour
 		isInMotion = false;
 		isEnemyDead = false;
 		enemyHealth = enemy.GetComponent<EnemyHealth> ();
+
+		//playerInput.Attack += new EventHandler (AttackHandler);
 	}
 	
 	// Update is called once per frame
@@ -106,9 +113,19 @@ public class PlayerMovement : MonoBehaviour
 		{
 			isInMotion = true;
 		}
-
-		MoveTowardToEnemy ();
+		if (isInMotion) MoveTowardToEnemy();
 		ResetToStartPosition ();
+
+//		if (isInMotion && gameManager.isPlayerTurn && playerHealth.CurrentHealth > 0.0f && enemyHealth.CurrentHealth > 0.0f)
+//		{
+//			MoveTowardToEnemy ();
+//		}
+//		ResetToStartPosition ();
+	}
+
+	private void AttackHandler(object sender, EventArgs e)
+	{
+		isInMotion = true;
 	}
 
 	/// <summary>
@@ -116,12 +133,9 @@ public class PlayerMovement : MonoBehaviour
 	/// </summary>
 	private void MoveTowardToEnemy()
 	{
-		if (isInMotion)
-		{
-			anim.Play ("Walk");
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, enemy.transform.position, step);
-		}
+		anim.Play ("Walk");
+		float step = speed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards (transform.position, enemy.transform.position, step);
 	}
 
 	/// <summary>
@@ -134,6 +148,11 @@ public class PlayerMovement : MonoBehaviour
 		{
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
+		}
+
+		if (transform.position == startPosition)
+		{
+			isInMotion = false;
 		}
 	}
 

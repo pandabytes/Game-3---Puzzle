@@ -7,6 +7,7 @@ public class EarthSpikeAttack : MonoBehaviour
 	public GameObject rock_2;
 	public GameObject rock_3;
 	public GameObject rock_4;
+	public AudioSource earthRumbleSound;
 
 	// Use this for initialization
 	void Start ()
@@ -34,6 +35,10 @@ public class EarthSpikeAttack : MonoBehaviour
 		Animation anim_3 = rock_3.GetComponent<Animation> ();
 		Animation anim_4 = rock_4.GetComponent<Animation> ();
 
+		// Play the sound effect
+		earthRumbleSound.Play ();
+		earthRumbleSound.volume = 1.0f;
+
 		anim_1.Play ("Rise_1");
 		yield return new WaitForSeconds (0.4f);
 		anim_1.Play ("Drop_1");
@@ -55,6 +60,18 @@ public class EarthSpikeAttack : MonoBehaviour
 		anim_4.Play ("Rise_4");
 		yield return new WaitForSeconds (0.4f);
 		anim_4.Play ("Drop_4");
+
+		// Fade out the sound effect
+		yield return new WaitForSeconds (0.3f);
+		earthRumbleSound.volume = 0.7f;
+		yield return new WaitForSeconds (0.3f);
+		earthRumbleSound.volume = 0.4f;
+		yield return new WaitForSeconds (0.3f);
+		earthRumbleSound.volume = 0.1f;
+		yield return new WaitForSeconds (0.3f);
+		earthRumbleSound.volume = 0.0f;
+
+		earthRumbleSound.Stop ();
 	}
 }
 

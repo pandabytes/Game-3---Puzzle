@@ -83,9 +83,16 @@ public class UIManager : MonoBehaviour
 		switch (stage)
 		{
 			case (StageEnum.FirstStage):
-				LoadSecondStageScene ();
+			SceneManager.LoadScene ("Stage 2");
 				break;
 			case (StageEnum.SecondStage):
+				SceneManager.LoadScene ("Stage 3");
+				break;
+			case (StageEnum.ThirdStage):
+				break;
+			case (StageEnum.FourthStage):
+				break;
+			case(StageEnum.FiftheStage):
 				break;
 		}
 
@@ -94,30 +101,6 @@ public class UIManager : MonoBehaviour
 	#endregion
 
 	#region Public Methods
-
-	/// <summary>
-	/// Loads the first stage scene.
-	/// </summary>
-	public void LoadFirstStageScene()
-	{
-		SceneManager.LoadScene ("Stage 1");
-	}
-
-	/// <summary>
-	/// Loads the second stage scene.
-	/// </summary>
-	public void LoadSecondStageScene()
-	{
-		SceneManager.LoadScene ("Stage 2");
-	}
-
-	/// <summary>
-	/// Quit this instance.
-	/// </summary>
-	public void Quit()
-	{
-		Application.Quit ();
-	}
 
 	/// <summary>
 	/// Enables the pop up window.
