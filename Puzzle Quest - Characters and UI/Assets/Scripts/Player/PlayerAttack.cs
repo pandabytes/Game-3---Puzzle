@@ -1,7 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DigitalRuby;
 
 public class PlayerAttack : MonoBehaviour 
 {
@@ -11,6 +11,16 @@ public class PlayerAttack : MonoBehaviour
 	/// The game manager.
 	/// </summary>
 	public GameManager gameManager;
+
+	/// <summary>
+	/// The player input.
+	/// </summary>
+	public GridManager gridManager;
+
+	/// <summary>
+	/// This demtermines how much damage to deal to the enemy.
+	/// </summary>
+	private float score;
 
 	/// <summary>
 	/// The animation component of the player.
@@ -29,8 +39,10 @@ public class PlayerAttack : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		score = 0.0f;
 		anim = GetComponent<Animation> ();
 		playerMovement = gameObject.GetComponent<PlayerMovement> ();
+		gridManager.Attack += new EventHandler (AttackHandler);
 	}
 
 	/// <summary>
@@ -46,12 +58,12 @@ public class PlayerAttack : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
-		SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
+//		SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
 
-		if (slimeHealth != null)
-			slimeHealth.ReceiveDamage (Constants.PhysicalDamage);
-		else
-			enemyHealth.ReceiveDamage (Constants.PhysicalDamage);
+//		if (slimeHealth != null)
+//			slimeHealth.ReceiveDamage (Constants.PhysicalDamage);
+//		else
+			enemyHealth.ReceiveDamage (score * Constants.PhysicalDamage);
 	}
 
 	/// <summary>
@@ -66,6 +78,19 @@ public class PlayerAttack : MonoBehaviour
 			playerMovement.IsInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine (other.gameObject));
 		}
+	}
+
+	/// <summary>
+	/// Handle the attack event sent from the grid.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void AttackHandler(object sender, EventArgs e)
+	{
+		playerMovement.IsInMotion = true;
+		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
+		score = scoreEvent.Score;
+		Debug.Log ("Score received: " + scoreEvent.Score.ToString ());
 	}
 
 	#endregion

@@ -15,21 +15,6 @@ public class PlayerInput : MonoBehaviour {
 		gridManager = GetComponent<GridManager> ();
 	}
 
-	/// <summary>
-	/// Occurs when player has finished making his move.
-	/// </summary>
-	public event EventHandler Attack;
-
-	/// <summary>
-	/// Raises the attack event.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	protected virtual void OnAttack(object sender, EventArgs e)
-	{
-		Attack (sender, e);
-	}
-
 	// Update is called once per frame
 	void Update ()
 	{
@@ -80,7 +65,6 @@ public class PlayerInput : MonoBehaviour {
                 hitControl.Move(activeXY);
 
                 gridManager.SwitchTiles(hitXY, activeXY);
-				OnAttack (this, EventArgs.Empty);
 
             /*   
                 if (gridManager.SwitchBack())

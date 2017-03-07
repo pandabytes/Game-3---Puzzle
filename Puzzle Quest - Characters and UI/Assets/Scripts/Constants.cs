@@ -35,6 +35,8 @@ public static class Constants
 	/// </summary>
 	public const float HealAmount = 5.0f;
 
+
+
 	#region Messages
 
 	public const string FireBallMessage = "You gain Fire Ball spell !!!";

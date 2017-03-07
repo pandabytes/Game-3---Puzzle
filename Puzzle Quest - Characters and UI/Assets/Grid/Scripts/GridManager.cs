@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using SY = System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour {
 	private int score;
     public MainUI mainUI;
+	public Timer timer;
 
 	//a simple class to handle the coordinates
 	public class XY
@@ -51,6 +53,7 @@ public class GridManager : MonoBehaviour {
 	{
 		CreateGrid();
         CheckMatches();
+		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
 	}
 
 	void CreateGrid()
@@ -258,10 +261,44 @@ public class GridManager : MonoBehaviour {
             }
         }
 
-        if (tilesToDestroy.Count != 0) 
+		if (tilesToDestroy.Count != 0)
+		{
+			ScoreEventArgs scoreEvent = new ScoreEventArgs (2.0f); 
+			OnAttack (this, scoreEvent);
 			DestroyMatches (tilesToDestroy);
+		}
 		else
+		{
 			ReplaceTiles ();
+		}
+	}
+
+	/// <summary>
+	/// Occurs when player has finished making his move.
+	/// </summary>
+	public event SY.EventHandler Attack;
+
+	/// <summary>
+	/// Raises the attack event.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	protected virtual void OnAttack(object sender, SY.EventArgs e)
+	{
+		if (Attack != null)
+		{
+			Attack (sender, e);
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void TimesUpHandler(object sender, SY.EventArgs e)
+	{
+		score = 0;
 	}
 
 	void DestroyMatches(List<XY> tilesToDestroy)

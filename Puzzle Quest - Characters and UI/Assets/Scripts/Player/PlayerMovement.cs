@@ -56,11 +56,6 @@ public class PlayerMovement : MonoBehaviour
 	/// </summary>
 	public GameObject chest;
 
-	/// <summary>
-	/// The player input.
-	/// </summary>
-	public PlayerInput playerInput;
-
 	#endregion
 
 	#region Public Getters and Setters
@@ -89,8 +84,6 @@ public class PlayerMovement : MonoBehaviour
 		isInMotion = false;
 		isEnemyDead = false;
 		enemyHealth = enemy.GetComponent<EnemyHealth> ();
-
-		//playerInput.Attack += new EventHandler (AttackHandler);
 	}
 	
 	// Update is called once per frame
@@ -108,24 +101,19 @@ public class PlayerMovement : MonoBehaviour
 			anim.Play ("Wait");
 		}
 		
-		if (Input.GetKeyDown (KeyCode.Space) && gameManager.isPlayerTurn &&
-			playerHealth.CurrentHealth > 0.0f && enemyHealth.CurrentHealth > 0.0f)
-		{
-			isInMotion = true;
-		}
-		if (isInMotion) MoveTowardToEnemy();
-		ResetToStartPosition ();
-
-//		if (isInMotion && gameManager.isPlayerTurn && playerHealth.CurrentHealth > 0.0f && enemyHealth.CurrentHealth > 0.0f)
+//		if (Input.GetKeyDown (KeyCode.Space) && gameManager.isPlayerTurn &&
+//			playerHealth.CurrentHealth > 0.0f && enemyHealth.CurrentHealth > 0.0f)
 //		{
-//			MoveTowardToEnemy ();
+//			isInMotion = true;
 //		}
+//		if (isInMotion) MoveTowardToEnemy();
 //		ResetToStartPosition ();
-	}
 
-	private void AttackHandler(object sender, EventArgs e)
-	{
-		isInMotion = true;
+		if (isInMotion && gameManager.isPlayerTurn && playerHealth.CurrentHealth > 0.0f && enemyHealth.CurrentHealth > 0.0f)
+		{
+			MoveTowardToEnemy ();
+		}
+		ResetToStartPosition ();
 	}
 
 	/// <summary>
