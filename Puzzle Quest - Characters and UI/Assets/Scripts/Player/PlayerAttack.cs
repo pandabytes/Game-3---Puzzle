@@ -58,12 +58,7 @@ public class PlayerAttack : MonoBehaviour
 		yield return new WaitForSeconds(0.2f);
 
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
-//		SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
-
-//		if (slimeHealth != null)
-//			slimeHealth.ReceiveDamage (Constants.PhysicalDamage);
-//		else
-			enemyHealth.ReceiveDamage (score * Constants.PhysicalDamage);
+		enemyHealth.ReceiveDamage (score * Constants.PhysicalDamage);
 	}
 
 	/// <summary>
@@ -73,7 +68,7 @@ public class PlayerAttack : MonoBehaviour
 	/// <param name="other">Other.</param>
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "Enemy" && gameManager.isPlayerTurn && playerMovement.IsInMotion)
+		if (other.gameObject.tag == "Enemy" && playerMovement.IsInMotion)
 		{		
 			playerMovement.IsInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine (other.gameObject));
@@ -90,7 +85,6 @@ public class PlayerAttack : MonoBehaviour
 		playerMovement.IsInMotion = true;
 		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
 		score = scoreEvent.Score;
-		Debug.Log ("Score received: " + scoreEvent.Score.ToString ());
 	}
 
 	#endregion

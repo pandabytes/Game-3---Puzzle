@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour {
-	private int score;
+	public int score;
     public MainUI mainUI;
 	public Timer timer;
 
@@ -51,8 +51,11 @@ public class GridManager : MonoBehaviour {
 
 	void Awake()
 	{
+		score = 0;
 		CreateGrid();
         CheckMatches();
+		score = 0;
+		mainUI.SetScoreText (score);
 		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
 	}
 
@@ -83,102 +86,7 @@ public class GridManager : MonoBehaviour {
 		Grid [firstXY.X, firstXY.Y] = secondTile;
 		Grid [secondXY.X, secondXY.Y] = firstTile;
 	}
-/*
-    public bool SwitchBack()
-    {
-        List<XY> checkingTiles = new List<XY>(); //Tiles that are currently being considered for a match-3
-        List<XY> tilesToDestroy = new List<XY>(); //Tiles that are confirmed match-3s and will be destroyed
 
-        //vertical check
-        for (int x = 0; x < GridWidth; x++)
-        {
-            int currentTileType = -1;
-            int lastTileType = -1;
-
-            if (checkingTiles.Count >= 3)
-                tilesToDestroy.AddRange(checkingTiles);
-
-            checkingTiles.Clear();
-
-            for (int y = 0; y < GridHeight; y++)
-            {
-                currentTileType = Grid[x, y].TileType;
-
-                if (currentTileType != lastTileType)
-                {
-                    if (checkingTiles.Count >= 3)
-                        tilesToDestroy.AddRange(checkingTiles);
-
-                    checkingTiles.Clear();
-                }
-
-                checkingTiles.Add(new XY(x, y));
-                lastTileType = currentTileType;
-            }
-        }
-
-        if (checkingTiles.Count >= 3)
-        {
-            tilesToDestroy.AddRange(checkingTiles);
-        }
-        checkingTiles.Clear();
-
-        //horizontal check
-        for (int y = 0; y < GridHeight; y++)
-        {
-            int currentTileType = -1;
-            int lastTileType = -1;
-
-            if (checkingTiles.Count >= 3)
-            {
-                for (int i = 0; i < checkingTiles.Count; i++)
-                {
-                    if (!tilesToDestroy.Contains(checkingTiles[i]))
-                        tilesToDestroy.Add(checkingTiles[i]);
-                }
-            }
-            checkingTiles.Clear();
-
-            for (int x = 0; x < GridWidth; x++)
-            {
-                currentTileType = Grid[x, y].TileType;
-
-                if (currentTileType != lastTileType)
-                {
-                    if (checkingTiles.Count >= 3)
-                    {
-                        for (int i = 0; i < checkingTiles.Count; i++)
-                        {
-                            if (!tilesToDestroy.Contains(checkingTiles[i]))
-                                tilesToDestroy.Add(checkingTiles[i]);
-                        }
-                    }
-                    checkingTiles.Clear();
-                }
-
-                checkingTiles.Add(new XY(x, y));
-                lastTileType = currentTileType;
-            }
-        }
-
-        if (checkingTiles.Count >= 3)
-        {
-            for (int i = 0; i < checkingTiles.Count; i++)
-            {
-                if (!tilesToDestroy.Contains(checkingTiles[i]))
-                    tilesToDestroy.Add(checkingTiles[i]);
-            }
-        }
-        Debug.Log(tilesToDestroy.Count);
-        if (tilesToDestroy.Count == 0)
-        {
-            Debug.Log("should be switching back");
-            return true;
-        }
-        return false;
-
-    }
-    */
 	public void CheckMatches()
 	{
 		List<XY> checkingTiles = new List<XY> (); //Tiles that are currently being considered for a match-3
@@ -263,8 +171,7 @@ public class GridManager : MonoBehaviour {
 
 		if (tilesToDestroy.Count != 0)
 		{
-			ScoreEventArgs scoreEvent = new ScoreEventArgs (2.0f); 
-			OnAttack (this, scoreEvent);
+			AddScore (tilesToDestroy.Count);
 			DestroyMatches (tilesToDestroy);
 		}
 		else
@@ -292,27 +199,26 @@ public class GridManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// 
+	/// Reset the score when the time expires.
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
 	private void TimesUpHandler(object sender, SY.EventArgs e)
 	{
+		float tempScore = (float) score;
+		ScoreEventArgs scoreEvent = new ScoreEventArgs (tempScore);
+		OnAttack (this, scoreEvent);
+
 		score = 0;
+		mainUI.SetScoreText (score);
 	}
 
 	void DestroyMatches(List<XY> tilesToDestroy)
 	{
-		score = 0;
 		for (int i = 0; i < tilesToDestroy.Count; i++) 
 		{
 			Destroy (Grid[tilesToDestroy [i].X, tilesToDestroy [i].Y].GO);
 			Grid [tilesToDestroy [i].X, tilesToDestroy [i].Y] = new Tile ();
-
-			if (i <= 2)
-				AddScore (1);
-			else
-				AddScore (2);
 		}
 		GravityCheck ();
 	}

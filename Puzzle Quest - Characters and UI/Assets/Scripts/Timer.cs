@@ -18,6 +18,7 @@ public class Timer : MonoBehaviour
 	private string hourText;
 
 	public Text timeText;
+	public GameManager gameManager;
 
 	#endregion
 
@@ -50,7 +51,10 @@ public class Timer : MonoBehaviour
 		second += Time.deltaTime;
 		if ((int)second == 16)
 		{
-			OnTimesUp (this, EventArgs.Empty);
+			second = 0.0f;
+
+			// Send notifcation to indicate whose turn is next
+			OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
 		}
 
 		SetTimerText ();
@@ -125,7 +129,7 @@ public class Timer : MonoBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	protected virtual void OnTimesUp(object sender, EventArgs e)
+	public virtual void OnTimesUp(object sender, EventArgs e)
 	{
 		if (TimesUp != null)
 		{

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour 
 {
@@ -48,6 +49,11 @@ public class PlayerHealth : MonoBehaviour
 	/// </summary>
 	public GameObject healingAura;
 
+	/// <summary>
+	/// The grid manager.
+	/// </summary>
+	public GridManager2 gridManager;
+
 	#endregion
 
 	#region Getters and Setters
@@ -76,6 +82,8 @@ public class PlayerHealth : MonoBehaviour
 		damageImage.color = Color.clear;
 		damageImage.gameObject.SetActive (true);
 		flashColor = new Color (1.0f, 0.0f, 0.0f, 0.5f);
+
+		gridManager.Heal += new EventHandler (HealHandler);
 	}
 	
 	// Update is called once per frame
@@ -127,6 +135,32 @@ public class PlayerHealth : MonoBehaviour
 		healingAura.SetActive (!healingAura.activeSelf);
 	}
 
+	/// <summary>
+	/// Player death coroutine.
+	/// </summary>
+	/// <returns>The death coroutine.</returns>
+	private IEnumerator PlayerDeathCoroutine()
+	{
+		anim.Stop ();
+		anim.Play ("Dead");
+		OnPlayerDeath (this, EventArgs.Empty);
+
+		// After 3 seconds, load the game over scene
+		yield return new WaitForSeconds (2.0f);
+		SceneManager.LoadScene ("GameOver");
+	}
+
+	/// <summary>
+	/// Handle the heal event.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void HealHandler(object sender, EventArgs e)
+	{
+		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
+		HealPlayer (scoreEvent.Score);
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -148,11 +182,10 @@ public class PlayerHealth : MonoBehaviour
 			SetHealth (scaledDamage);
 		}
 
+		// Indicate when the player is dead.
 		if (currentHealth <= 0.0f)
 		{
-			anim.Stop ();
-			anim.Play ("Dead");
-			OnPlayerDeath (this, EventArgs.Empty);
+			StartCoroutine (PlayerDeathCoroutine ());
 		}
 	}
 

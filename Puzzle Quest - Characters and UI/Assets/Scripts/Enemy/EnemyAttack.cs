@@ -17,6 +17,11 @@ public class EnemyAttack : MonoBehaviour
 	public GameManager gameManager;
 
 	/// <summary>
+	/// The timer.
+	/// </summary>
+	public Timer timer;
+
+	/// <summary>
 	/// The player object.
 	/// </summary>
 	protected GameObject player;
@@ -62,16 +67,17 @@ public class EnemyAttack : MonoBehaviour
 		anim = gameObject.GetComponent<Animation> ();
 		enemyHealth = gameObject.GetComponent<EnemyHealth> ();
 
-		InvokeRepeating ("EnableAttack", 2.0f, 6.0f);
+		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-		if (enemyHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn)
+		if (enemyHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion)
 		{
-			Attack ();
+			MoveTowardToPlayer ();
 		}
+		ResetToStartPosition ();
 	}
 
 	/// <summary>
@@ -96,12 +102,9 @@ public class EnemyAttack : MonoBehaviour
 	/// </summary>
 	protected virtual void MoveTowardToPlayer()
 	{
-		if (isInMotion)
-		{
-			anim.Play ("Walk");
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
-		}
+		anim.Play ("Walk");
+		float step = speed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
 	}
 
 	/// <summary>
@@ -114,6 +117,13 @@ public class EnemyAttack : MonoBehaviour
 		{
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
+
+			if (transform.position == startPosition)
+			{
+				timer.SetStartTime (0, 0, 0);
+				isInMotion = true;
+				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+			}
 		}
 	}
 
@@ -129,7 +139,7 @@ public class EnemyAttack : MonoBehaviour
 		anim.Play ("Attack");
 
 		yield return new WaitForSeconds(0.3f);
-		playerHealth.ReceiveDamage (Constants.PhysicalDamage);
+		playerHealth.ReceiveDamage (Constants.EnemyDamage);
 	}
 
 	/// <summary>
@@ -160,6 +170,16 @@ public class EnemyAttack : MonoBehaviour
 	protected void PlayerDeathHandler(object sender, EventArgs e)
 	{
 		CancelInvoke ();
+	}
+
+	/// <summary>
+	/// Handler for when the time is up.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	protected void TimesUpHandler(object sender, EventArgs e)
+	{
+		isInMotion = !isInMotion;
 	}
 
 	#endregion

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,9 +38,20 @@ public class GameManager : MonoBehaviour
 	public UIManager uiManager;
 
 	/// <summary>
+	/// The left camera.
+	/// </summary>
+	public Image coverImage1;
+
+	/// <summary>
+	/// The right camera.
+	/// </summary>
+	public Image coverImage2;
+
+	/// <summary>
 	/// The timer.
 	/// </summary>
 	public Timer timer;
+
 
 	#endregion
 
@@ -96,8 +108,30 @@ public class GameManager : MonoBehaviour
 	/// <param name="e">E.</param>
 	private void TimesUpHandler(object sender, EventArgs e)
 	{
+		coverImage1.gameObject.SetActive (!coverImage1.gameObject.activeSelf);
+		coverImage2.gameObject.SetActive (!coverImage2.gameObject.activeSelf);
+		StartCoroutine (TimesUpCoroutine ());
+	}
+
+	/// <summary>
+	/// Times up coroutine.
+	/// </summary>
+	/// <returns>The up coroutine.</returns>
+	private IEnumerator TimesUpCoroutine()
+	{
+		if (!isPlayerTurn)
+		{
+			uiManager.DisplayTurn (!isPlayerTurn);
+		}
+
+		yield return new WaitForSeconds (5.0f);
+
+		if (isPlayerTurn)
+		{
+			uiManager.DisplayTurn (!isPlayerTurn);
+		}
+		yield return new WaitForSeconds (1.5f);
 		isPlayerTurn = !isPlayerTurn;
-		timer.SetStartTime (0.0f, 0.0f, 0.0f);
 	}
 
 	#endregion

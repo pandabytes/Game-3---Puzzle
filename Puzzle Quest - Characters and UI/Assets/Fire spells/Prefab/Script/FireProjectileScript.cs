@@ -82,12 +82,7 @@ namespace DigitalRuby.PyroParticles
 			if (c.gameObject.tag == "Enemy")
 			{
 				EnemyHealth enemyHealth = c.gameObject.GetComponent<EnemyHealth> ();
-				SlimeHealth slimeHealth = enemyHealth as SlimeHealth;
-
-				if (slimeHealth != null)
-					slimeHealth.ReceiveDamage (Constants.FireBallDamage);
-				else
-					enemyHealth.ReceiveDamage (Constants.FireBallDamage);
+				enemyHealth.ReceiveDamage (Constants.FireBallDamage);
 			}
 
             // destroy particle systems after a slight delay

@@ -16,12 +16,17 @@ public static class Constants
 	/// <summary>
 	/// The physical damage.
 	/// </summary>
-	public const float PhysicalDamage = 10.0f;
+	public const float PhysicalDamage = 1.0f;
+
+	/// <summary>
+	/// The enemy damage.
+	/// </summary>
+	public const float EnemyDamage = 17.0f;
 
 	/// <summary>
 	/// The fire ball damage.
 	/// </summary>
-	public const float FireBallDamage = 17.6f;
+	public const float FireBallDamage = 12.0f;
 
 	/// <summary>
 	/// The earth spike damage.
@@ -34,8 +39,6 @@ public static class Constants
 	/// THe amount of HP recovered from healing
 	/// </summary>
 	public const float HealAmount = 5.0f;
-
-
 
 	#region Messages
 

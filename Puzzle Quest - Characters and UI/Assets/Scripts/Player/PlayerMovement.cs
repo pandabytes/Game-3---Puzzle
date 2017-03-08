@@ -56,6 +56,11 @@ public class PlayerMovement : MonoBehaviour
 	/// </summary>
 	public GameObject chest;
 
+	/// <summary>
+	/// The timer.
+	/// </summary>
+	public Timer timer;
+
 	#endregion
 
 	#region Public Getters and Setters
@@ -84,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
 		isInMotion = false;
 		isEnemyDead = false;
 		enemyHealth = enemy.GetComponent<EnemyHealth> ();
+		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 	
 	// Update is called once per frame
@@ -91,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (isEnemyDead)
 		{
-			anim.Play ("Walk");
+			anim.Play ("Wait");
 			return;
 		}
 
@@ -143,6 +149,17 @@ public class PlayerMovement : MonoBehaviour
 			isInMotion = false;
 		}
 	}
+
+	/// <summary>
+	/// Handler for when the time is up.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void TimesUpHandler(object sender, EventArgs e)
+	{
+		//isInMotion = !isInMotion;
+	}
+
 
 	#endregion
 }
