@@ -64,6 +64,12 @@ public class GameManager : MonoBehaviour
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth> ();
 		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);
 		timer.TimesUp += new EventHandler (TimesUpHandler);
+
+		Color tempColor = coverImage1.color;
+		tempColor.a = 0.8f;
+		coverImage1.color = tempColor;
+		coverImage2.color = tempColor;
+
 	}
 	
 	// Update is called once per frame
@@ -101,19 +107,6 @@ public class GameManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Handler for when the time is up.
-	/// Switch turn and restart the timer.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	private void TimesUpHandler(object sender, EventArgs e)
-	{
-		coverImage1.gameObject.SetActive (!coverImage1.gameObject.activeSelf);
-		coverImage2.gameObject.SetActive (!coverImage2.gameObject.activeSelf);
-		StartCoroutine (TimesUpCoroutine ());
-	}
-
-	/// <summary>
 	/// Times up coroutine.
 	/// </summary>
 	/// <returns>The up coroutine.</returns>
@@ -133,6 +126,27 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSeconds (1.5f);
 		isPlayerTurn = !isPlayerTurn;
 	}
+
+	/// <summary>
+	/// Handler for when the time is up.
+	/// Display whose turn is next.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void TimesUpHandler(object sender, EventArgs e)
+	{
+		// If the next turn is enemy's, then disable the coutdown time and reset the time
+		if (!isPlayerTurn == false)
+		{
+			timer.StopTimer = true;
+			timer.Second = Constants.TimeLimit;
+		}
+
+		coverImage1.gameObject.SetActive (!coverImage1.gameObject.activeSelf);
+		coverImage2.gameObject.SetActive (!coverImage2.gameObject.activeSelf);
+		StartCoroutine (TimesUpCoroutine ());
+	}
+
 
 	#endregion
 }

@@ -118,9 +118,11 @@ public class EnemyAttack : MonoBehaviour
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
 
+			// Send a notifcation to indicate that the enemy's turn has completed.
 			if (transform.position == startPosition)
 			{
-				timer.SetStartTime (0, 0, 0);
+				timer.Second = Constants.TimeLimit;
+				timer.StopTimer = false;
 				isInMotion = true;
 				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
 			}

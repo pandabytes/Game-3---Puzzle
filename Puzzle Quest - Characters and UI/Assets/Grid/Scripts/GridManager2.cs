@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using SY = System;
 
 public class GridManager2 : MonoBehaviour
 {
 	public int score;
-    public MainUI mainUI;
     public int distanceFromOtherBoard;
+	public Text scoreText;
 	public Timer timer;
 
     //a simple class to handle the coordinates
@@ -53,6 +54,7 @@ public class GridManager2 : MonoBehaviour
 
     void Awake()
     {
+		score = 0;
         CreateGrid();
         CheckMatches();
 		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
@@ -206,11 +208,14 @@ public class GridManager2 : MonoBehaviour
 	/// <param name="e">E.</param>
 	private void TimesUpHandler(object sender, SY.EventArgs e)
 	{
-		ScoreEventArgs scoreEvent = new ScoreEventArgs (score);
-		OnHeal (this, scoreEvent);
+		if (score > 0)
+		{
+			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float)score);
+			OnHeal (this, scoreEvent);
 
-		score = 0;
-		mainUI.SetScoreText (score);
+			score = 0;
+			scoreText.text = score.ToString();
+		}
 	}
 
     void DestroyMatches(List<XY2> tilesToDestroy)
@@ -226,7 +231,7 @@ public class GridManager2 : MonoBehaviour
     void AddScore(int amount)
     {
         score += amount;
-        mainUI.SetScoreText(score);
+		scoreText.text = score.ToString();
     }
 
     void ReplaceTiles()

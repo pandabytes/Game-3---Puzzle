@@ -1,11 +1,12 @@
 ﻿using SY = System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour {
 	public int score;
-    public MainUI mainUI;
+	public Text scoreText;
 	public Timer timer;
 
 	//a simple class to handle the coordinates
@@ -55,7 +56,6 @@ public class GridManager : MonoBehaviour {
 		CreateGrid();
         CheckMatches();
 		score = 0;
-		mainUI.SetScoreText (score);
 		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
 	}
 
@@ -205,12 +205,15 @@ public class GridManager : MonoBehaviour {
 	/// <param name="e">E.</param>
 	private void TimesUpHandler(object sender, SY.EventArgs e)
 	{
-		float tempScore = (float) score;
-		ScoreEventArgs scoreEvent = new ScoreEventArgs (tempScore);
-		OnAttack (this, scoreEvent);
+		// Do not deal damage is score is <= 0
+		if (score > 0)
+		{
+			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float) score);
+			OnAttack (this, scoreEvent);
 
-		score = 0;
-		mainUI.SetScoreText (score);
+			score = 0;
+			scoreText.text = score.ToString();
+		}
 	}
 
 	void DestroyMatches(List<XY> tilesToDestroy)
@@ -226,7 +229,7 @@ public class GridManager : MonoBehaviour {
 	void AddScore (int amount)
 	{
 		score += amount;
-        mainUI.SetScoreText(score);
+		scoreText.text = score.ToString();
 	}
 
 	void ReplaceTiles()
@@ -253,7 +256,6 @@ public class GridManager : MonoBehaviour {
 				go.name = x + "/" + tileY;
 			}
 		}
-        //CheckForLegalMoves();
 	}
 
 	void GravityCheck()
@@ -294,123 +296,4 @@ public class GridManager : MonoBehaviour {
 		if (movingTiles == 0)
            CheckMatches ();
 	}
-/*
-    public void CheckForLegalMoves()
-    {
-        //vertical check
-        for(int x = 0; x < GridWidth; x++)
-        {
-            int secondToLastType = -1;
-            int lastType = -2;
-            int currentType = -3;
-
-            for(int y = 0; y < GridHeight; y++)
-            {
-                currentType = Grid[x, y].TileType;
-                if(lastType == currentType)
-                {
-                    if (CheckForTileType(x, y - 3, currentType))
-                        return;
-                    if (CheckForTileType(x + 1, y - 2, currentType))
-                        return;
-                    if (CheckForTileType(x - 1, y - 2, currentType))
-                        return;
-                    if (CheckForTileType(x, y + 2, currentType))
-                        return;
-                    if (CheckForTileType(x + 1, y + 1, currentType))
-                        return;
-                    if (CheckForTileType(x - 1, y + 1, currentType))
-                        return;
-                }
-                else if(secondToLastType == currentType)
-                {
-                    if (CheckForTileType(x + 1, y - 1, currentType))
-                        return;
-                    if (CheckForTileType(x - 1, y - 1, currentType))
-                        return;
-                }
-                secondToLastType = lastType;
-                lastType = currentType;
-            }
-        }
-
-        for(int y = 0; y < GridHeight; y++)
-        {
-            int secondToLastType = -1;
-            int lastType = -2;
-            int currentType = -3;
-
-            for(int x = 0; x < GridWidth; x++)
-            {
-                currentType = Grid[x, y].TileType;
-                if(lastType == currentType)
-                {
-                    if (CheckForTileType(x - 3, y, currentType))
-                        return;
-                    if (CheckForTileType(x - 2, y + 1, currentType))
-                        return;
-                    if (CheckForTileType(x - 2, y - 1, currentType))
-                        return;
-                    if (CheckForTileType(x + 2, y, currentType))
-                        return;
-                    if (CheckForTileType(x + 1, y + 1, currentType))
-                        return;
-                    if (CheckForTileType(x + 1, y - 1, currentType))
-                        return;
-                }
-                else if (secondToLastType == currentType)
-                {
-                    if (CheckForTileType(x - 1, y + 1, currentType))
-                        return;
-                    if (CheckForTileType(x - 1, y - 1, currentType))
-                        return;
-                }
-                secondToLastType = lastType;
-                lastType = currentType;
-            }
-        }
-
-        ShuffleGrid();
-    }
-    */
-    /*
-    bool CheckForTileType(int x, int y, int tileType)
-    {
-        if (x >= 0 && x < GridWidth && y >= 0 && y < GridHeight)
-            return Grid[x, y].TileType == tileType;
-        else
-            return false;
-    }
-
-    public TileControl GetTileControl(XY xy)
-    {
-        return Grid[xy.X, xy.Y].TileControl;
-    }
-
-    void ShuffleGrid()
-    {
-        List<XY> xyList = new List<XY>();
-
-        for(int x = 0; x < GridWidth; x++)
-        {
-            for(int y = 0; y < GridWidth; y++)
-            {
-                xyList.Add(new XY(x, y));
-            }
-        }
-
-        for(int x = 0; x < GridWidth; x++)
-        {
-            for (int y = 0; y < GridWidth; y++)
-            {
-                System.Random rnd = new System.Random();
-                int index = rnd.Next(xyList.Count);
-                XY xy = xyList[index];
-                Grid[x, y].TileControl.Move(xy);
-                xyList.RemoveAt(index);
-            }
-        }
-        
-    }
-    */
 }

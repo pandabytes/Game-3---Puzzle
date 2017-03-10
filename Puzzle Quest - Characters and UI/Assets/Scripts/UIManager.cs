@@ -55,7 +55,8 @@ public class UIManager : MonoBehaviour
 			ClickOk ();
 		}
 
-		if (time <= 0.0f)
+		// Disable the instruction once the coundown reaches to 0
+		if (time <= 0.0f && !gameStart)
 		{
 			backgroundImage.gameObject.SetActive (false);
 			player1_instruction.gameObject.SetActive (false);
@@ -64,18 +65,19 @@ public class UIManager : MonoBehaviour
 			countDown.gameObject.SetActive (false);
 			timer.enabled = true;
 
-			if (!gameStart)
-			{
-				gridManager.score = 0;
-				gridManager2.score = 0;
-				gridManager.mainUI.SetScoreText (0);
-				gridManager2.mainUI.SetScoreText (0);
+			gridManager.score = 0;
+			gridManager2.score = 0;
 
-				gameStart = true;
-			}
+			gridManager.scoreText.text = "0";
+			gridManager2.scoreText.text = "0";
+
+			gameStart = true;
 		}
-		countDown.text = ((int)time).ToString ();
-		time -= Time.deltaTime;
+		else if (!gameStart)
+		{
+			countDown.text = ((int)time).ToString ();
+			time -= Time.deltaTime;
+		}
 	}
 
 	/// <summary>
@@ -139,7 +141,7 @@ public class UIManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Displaies the turn coroutine.
+	/// Display the turn coroutine.
 	/// </summary>
 	/// <returns>The turn coroutine.</returns>
 	/// <param name="isPlayerTurn">If set to <c>true</c> is player turn.</param>

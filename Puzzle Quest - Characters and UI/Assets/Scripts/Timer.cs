@@ -8,17 +8,28 @@ public class Timer : MonoBehaviour
 {
 	#region Member Variables
 
-	private float second = 0;
-	private float minute = 0;
-	private float hour = 0;
+	private float second;
+	private bool stopTimer;
 
 	private string timeFormat;
 	private string secondText;
-	private string minuteText;
-	private string hourText;
 
 	public Text timeText;
 	public GameManager gameManager;
+
+	#endregion
+
+	#region Getters and Setters
+
+	public float Second 
+	{
+		set { second = value; }
+	}
+
+	public bool StopTimer
+	{
+		set { stopTimer = value; }
+	}
 
 	#endregion
 
@@ -27,31 +38,23 @@ public class Timer : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		timeFormat = "{0}:{1}:{2}";
+		timeFormat = "{0}";
 		secondText = "00";
-		minuteText = "00";
-		hourText = "00";
+		second = Constants.TimeLimit;
+		stopTimer = false;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-		if (second >= 60.0f)
+		if (stopTimer)
+			return;
+		
+		second -= Time.deltaTime;
+		if (second <= 0.0f)
 		{
-			second = 0.0f;
-			minute++;
-		}
-
-		if (minute >= 60.0f)
-		{
-			minute = 0.0f;
-			hour++;
-		}
-
-		second += Time.deltaTime;
-		if ((int)second == 16)
-		{
-			second = 0.0f;
+			second = Constants.TimeLimit;
+			stopTimer = true;
 
 			// Send notifcation to indicate whose turn is next
 			OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
@@ -74,28 +77,8 @@ public class Timer : MonoBehaviour
 		{
 			secondText = ((int)second).ToString ();
 		}
-
-		// Minute format
-		if (minute < 10)
-		{
-			minuteText = "0" + ((int)minute).ToString ();
-		}
-		else
-		{
-			minuteText = ((int)minute).ToString ();
-		}
-
-		// Hour format
-		if (hour < 10)
-		{
-			hourText = "0" + ((int)hour).ToString ();
-		}
-		else
-		{
-			hourText = ((int)hour).ToString ();
-		}
 			
-		timeText.text = string.Format (timeFormat, hourText, minuteText, secondText);
+		timeText.text = string.Format (timeFormat, secondText);
 	}
 
 	#endregion
@@ -108,11 +91,9 @@ public class Timer : MonoBehaviour
 	/// <param name="startSecond">Start second.</param>
 	/// <param name="startMinute">Start minute.</param>
 	/// <param name="startHour">Start hour.</param>
-	public void SetStartTime(float startSecond, float startMinute, float startHour)
+	public void SetStartTime(float startSecond)
 	{
 		second = startSecond;
-		minute = startMinute;
-		hour = startHour;
 	}
 
 	#endregion
