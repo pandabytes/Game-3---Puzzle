@@ -60,7 +60,6 @@ public class EnemyAttack : MonoBehaviour
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
-		playerHealth.PlayerDeath += new EventHandler (PlayerDeathHandler);
 
 		startPosition = transform.position;
 		isInMotion = false;
@@ -108,7 +107,7 @@ public class EnemyAttack : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Reset the character to its orignal starting position after an attack.
+	/// Reset the enemy to its orignal starting position after an attack.
 	/// Move back to start position every frame.
 	/// </summary>
 	protected virtual void ResetToStartPosition()
@@ -157,17 +156,6 @@ public class EnemyAttack : MonoBehaviour
 			isInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine ());
 		}
-	}
-
-	/// <summary>
-	/// Handle the player death event.
-	/// Stop the enemy from attacking once player is dead.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	protected void PlayerDeathHandler(object sender, EventArgs e)
-	{
-		CancelInvoke ();
 	}
 
 	/// <summary>

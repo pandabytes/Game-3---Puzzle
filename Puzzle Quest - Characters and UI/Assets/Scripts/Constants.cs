@@ -24,6 +24,11 @@ public static class Constants
 	public const float EnemyDamage = 22.0f;
 
 	/// <summary>
+	/// The extra damage for fire ball.
+	/// </summary>
+	public const float ExtraDamage = 10.0f;
+
+	/// <summary>
 	/// The fire ball damage.
 	/// </summary>
 	public const float FireBallDamage = 1.2f;
@@ -31,7 +36,7 @@ public static class Constants
 	/// <summary>
 	/// The earth spike damage.
 	/// </summary>
-	public const float EarthSpikeDamage = 1.5f;
+	public const float EarthSpikeDamage = 1.7f;
 
 	/// <summary>
 	/// The ice shard damage.
@@ -61,6 +66,25 @@ public static class Constants
 	/// The ice shard.
 	/// </summary>
 	public const string IceShard = "IceShard";
+
+	#endregion
+
+	#region Spell Effects Description
+
+	/// <summary>
+	/// The fire ball effect description.
+	/// </summary>
+	public const string FireBallEffect = "You deal 10 extra damage !";
+
+	/// <summary>
+	/// The earth spike effect description.
+	/// </summary>
+	public const string EarthSpikeEffect = "Enemy damage is reduced by 1/2 !";
+
+	/// <summary>
+	/// The ice shard effect description.
+	/// </summary>
+	public const string IceShardEffect = "Enemy is frozen for 1 turn !";
 
 	#endregion
 

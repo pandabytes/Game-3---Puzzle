@@ -2,14 +2,19 @@
 using System;
 using System.Collections;
 
-public class SlimeAttack : EnemyAttack
+public class RabbitAttack : EnemyAttack
 {
 	#region Member Variables
 
 	/// <summary>
-	/// The slime health.
+	/// The rabbit health.
 	/// </summary>
-	private SlimeHealth slimeHealth;
+	private RabbitHealth rabbitHealth;
+
+	/// <summary>
+	/// The amount of damage to reduce by when hit by EarthSpike spell.
+	/// </summary>
+	private float reduceAttackDamage;
 
 	#endregion
 
@@ -18,20 +23,21 @@ public class SlimeAttack : EnemyAttack
 	// Use this for initialization
 	void Start ()
 	{
+		reduceAttackDamage = 0.0f;
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
 
 		startPosition = transform.position;
 		isInMotion = false;
-		slimeHealth = gameObject.GetComponent<SlimeHealth> ();
+		rabbitHealth = gameObject.GetComponent<RabbitHealth> ();
 
 		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-		if (slimeHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion)
+		if (rabbitHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion)
 		{
 			MoveTowardToPlayer ();
 		}
@@ -83,7 +89,8 @@ public class SlimeAttack : EnemyAttack
 		isInMotion = false;
 
 		yield return new WaitForSeconds(0.03f);
-		playerHealth.ReceiveDamage (Constants.EnemyDamage);
+		playerHealth.ReceiveDamage (Constants.EnemyDamage - reduceAttackDamage);
+		reduceAttackDamage = 0.0f;
 	}
 
 	/// <summary>
@@ -97,6 +104,15 @@ public class SlimeAttack : EnemyAttack
 		{
 			isInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine ());
+		}
+		else if (other.gameObject.tag == "Rock" && gameManager.isPlayerTurn)
+		{
+			// Display the spell effect
+			reduceAttackDamage = Constants.EnemyDamage / 2;
+			gameManager.uiManager.DisplaySpellEffect (Constants.EarthSpike);
+
+			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
+			rabbitHealth.ReceiveDamage (playerAttack.score * Constants.EarthSpikeDamage);
 		}
 	}
 

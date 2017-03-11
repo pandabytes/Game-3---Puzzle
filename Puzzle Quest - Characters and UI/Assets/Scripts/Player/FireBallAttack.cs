@@ -8,16 +8,9 @@ public class FireBallAttack : MonoBehaviour
 	private FireBaseScript fireBallScript;
 	public GameObject fireBallPrefab;
 
-	// Use this for initialization
-	void Start ()
-	{
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	}
-
+	/// <summary>
+	/// Shoots the fire ball.
+	/// </summary>
 	public void ShootFireBall()
 	{
 		StopFiring ();

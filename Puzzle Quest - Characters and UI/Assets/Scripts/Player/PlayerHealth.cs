@@ -154,7 +154,6 @@ public class PlayerHealth : MonoBehaviour
 		anim.Stop ();
 		anim.Play ("Dead");
 		gameState.stage = gameManager.stage;
-		OnPlayerDeath (this, EventArgs.Empty);
 
 		// After 0.5 second, load the game over scene
 		yield return new WaitForSeconds (0.5f);
@@ -210,25 +209,6 @@ public class PlayerHealth : MonoBehaviour
 		{
 			StartCoroutine (HealPlayerCoroutine (healAmount));
 		}
-	}
-
-	#endregion
-
-	#region Public Events
-
-	/// <summary>
-	/// Occurs when player dies;
-	/// </summary>
-	public event EventHandler PlayerDeath;
-
-	/// <summary>
-	/// Send notification when the player dies.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	protected virtual void OnPlayerDeath(object sender, EventArgs e)
-	{
-		PlayerDeath (sender, e);
 	}
 
 	#endregion

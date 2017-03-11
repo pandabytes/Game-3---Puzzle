@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
 	/// </summary>
 	public Text turnText;
 
+	// Grid UI
 	public Image backgroundImage;
 	public Text player1_instruction;
 	public Text player2_instruction;
@@ -33,6 +34,10 @@ public class UIManager : MonoBehaviour
 	public Image popUpWindow;
 	public Button okButton;
 	public Text message;
+
+	// Spell effects
+	public Image spellEffectBackground;
+	public Text spellEffectText;
 
 
 	#endregion
@@ -155,6 +160,37 @@ public class UIManager : MonoBehaviour
 		turnText.gameObject.SetActive (false);
 	}
 
+	/// <summary>
+	/// Display the spell effect coroutine.
+	/// </summary>
+	/// <returns>The spell effect coroutine.</returns>
+	/// <param name="spellName">Spell name.</param>
+	private IEnumerator DisplaySpellEffectCoroutine(string spellName)
+	{
+		// Set text effect
+		if (spellName == Constants.FireBall)
+		{
+			spellEffectText.text = Constants.FireBallEffect;
+		}
+		else if (spellName == Constants.EarthSpike)
+		{
+			spellEffectText.text = Constants.EarthSpikeEffect;
+		}
+		else if (spellName == Constants.IceShard)
+		{
+			spellEffectText.text = Constants.IceShardEffect;
+		}
+
+		// Turn the text and background on
+		spellEffectBackground.gameObject.SetActive (true);
+		spellEffectText.gameObject.SetActive (true);
+
+		// Turn off after 3 seconds
+		yield return new WaitForSeconds (3.0f);
+		spellEffectBackground.gameObject.SetActive (false);
+		spellEffectText.gameObject.SetActive (false);
+	}
+		
 	#endregion
 
 	#region Public Methods
@@ -178,6 +214,15 @@ public class UIManager : MonoBehaviour
 	public void DisplayTurn(bool isPlayerTurn)
 	{
 		StartCoroutine (DisplayTurnCoroutine (isPlayerTurn));
+	}
+
+	/// <summary>
+	/// Display the spell effect.
+	/// </summary>
+	/// <param name="spellName">Spell name.</param>
+	public void DisplaySpellEffect(string spellName)
+	{
+		StartCoroutine (DisplaySpellEffectCoroutine (spellName));
 	}
 
 	#endregion

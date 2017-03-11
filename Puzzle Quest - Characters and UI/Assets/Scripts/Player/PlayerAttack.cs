@@ -124,27 +124,28 @@ public class PlayerAttack : MonoBehaviour
 		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
 		score = scoreEvent.Score;
 		string attack = ChooseAttack (gameManager.stage);
-		Debug.Log (attack);
 
-		if (attack == Constants.PhysicalAttack)
-		{
-			playerMovement.IsInMotion = true;
-		}
-		else if (attack == Constants.FireBall)
-		{
-			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
-			fireBallSpell.ShootFireBall ();
-		}
-		else if (attack == Constants.EarthSpike)
-		{
-			// TODO: Earth spike
-			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
-			earthSpikeSpell.RaiseRocks ();
-		}
-		else
-		{
-			// TODO: Ice Shard
-		}
+		EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
+		earthSpikeSpell.RaiseRocks ();
+
+//		if (attack == Constants.PhysicalAttack)
+//		{
+//			playerMovement.IsInMotion = true;
+//		}
+//		else if (attack == Constants.FireBall)
+//		{
+//			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
+//			fireBallSpell.ShootFireBall ();
+//		}
+//		else if (attack == Constants.EarthSpike)
+//		{
+//			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
+//			earthSpikeSpell.RaiseRocks ();
+//		}
+//		else
+//		{
+//			// TODO: Ice Shard
+//		}
 	}
 
 	#endregion

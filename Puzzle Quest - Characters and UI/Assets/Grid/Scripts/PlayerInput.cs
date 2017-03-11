@@ -29,13 +29,6 @@ public class PlayerInput : MonoBehaviour {
 			else
 				AttemptMove ();
 		}
-        /*
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            activeTile = null;
-            Destroy(go);
-        }
-        */
 	}
 
 	// Tries to select a tile if the players left-clicks and no other tile is selected.

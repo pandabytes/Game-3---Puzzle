@@ -52,6 +52,7 @@ namespace DigitalRuby.PyroParticles
         private bool collided;
 
 		private PlayerAttack playerAttack;
+		private UIManager uiManager;
 
         private IEnumerator SendCollisionAfterDelay()
         {
@@ -67,6 +68,7 @@ namespace DigitalRuby.PyroParticles
             base.Start();
 
 			playerAttack = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack> ();
+			uiManager = GameObject.Find ("UI Manager").GetComponent<UIManager> ();
             StartCoroutine(SendCollisionAfterDelay());
         }
 
@@ -85,8 +87,10 @@ namespace DigitalRuby.PyroParticles
 			// Damage the enemy
 			if (c.gameObject.tag == "Enemy")
 			{
+				// Display the fire ball effect
+				uiManager.DisplaySpellEffect (Constants.FireBall);
 				EnemyHealth enemyHealth = c.gameObject.GetComponent<EnemyHealth> ();
-				enemyHealth.ReceiveDamage (playerAttack.score * Constants.FireBallDamage);
+				enemyHealth.ReceiveDamage ((playerAttack.score * Constants.FireBallDamage) + Constants.ExtraDamage);
 			}
 
             // destroy particle systems after a slight delay

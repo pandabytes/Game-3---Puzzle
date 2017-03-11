@@ -9,17 +9,9 @@ public class EarthSpikeAttack : MonoBehaviour
 	public GameObject rock_4;
 	public AudioSource earthRumbleSound;
 
-	// Use this for initialization
-	void Start ()
-	{
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	}
-
+	/// <summary>
+	/// Raises the rocks.
+	/// </summary>
 	public void RaiseRocks()
 	{
 		StartCoroutine (RaiseRocksCoroutine ());
