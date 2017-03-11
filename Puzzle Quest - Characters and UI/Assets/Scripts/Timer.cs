@@ -23,6 +23,7 @@ public class Timer : MonoBehaviour
 
 	public float Second 
 	{
+		get { return second; }
 		set { second = value; }
 	}
 

@@ -12,10 +12,9 @@ public class UIManager : MonoBehaviour
 	/// </summary>
 	public StageEnum stage;
 
-	/// <summary>
-	/// Indicate whose turn is next.
-	/// </summary>
+	// Turn text display
 	public Text turnText;
+	public Image turnTextBackground;
 
 	// Grid UI
 	public Image backgroundImage;
@@ -112,8 +111,7 @@ public class UIManager : MonoBehaviour
 				message.text = Constants.IceShardMessage;
 				break;
 			case (StageEnum.FourthStage):
-				break;
-			case(StageEnum.FiftheStage):
+				message.text = Constants.FinalMessage;
 				break;
 		}
 	}
@@ -137,10 +135,10 @@ public class UIManager : MonoBehaviour
 				SceneManager.LoadScene ("Stage 3");
 				break;
 			case (StageEnum.ThirdStage):
+				SceneManager.LoadScene ("Stage 4");
 				break;
 			case (StageEnum.FourthStage):
-				break;
-			case(StageEnum.FiftheStage):
+				SceneManager.LoadScene ("Win");
 				break;
 		}
 	}
@@ -155,9 +153,11 @@ public class UIManager : MonoBehaviour
 		turnText.text = (isPlayerTurn) ? "Player's Turn" : "Enemy's Turn";
 		turnText.color = (isPlayerTurn) ?  new Color (0.0f, 0.0f, 1.0f) : new Color (1.0f, 0.0f, 0.0f);
 		turnText.gameObject.SetActive (true);
+		turnTextBackground.gameObject.SetActive (true);
 
 		yield return new WaitForSeconds (2.0f);
 		turnText.gameObject.SetActive (false);
+		turnTextBackground.gameObject.SetActive (false);
 	}
 
 	/// <summary>

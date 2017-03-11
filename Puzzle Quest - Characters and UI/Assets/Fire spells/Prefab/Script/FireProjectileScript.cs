@@ -90,7 +90,7 @@ namespace DigitalRuby.PyroParticles
 				// Display the fire ball effect
 				uiManager.DisplaySpellEffect (Constants.FireBall);
 				EnemyHealth enemyHealth = c.gameObject.GetComponent<EnemyHealth> ();
-				enemyHealth.ReceiveDamage ((playerAttack.score * Constants.FireBallDamage) + Constants.ExtraDamage);
+				enemyHealth.ReceiveDamage ((playerAttack.Score * Constants.FireBallDamage) + Constants.ExtraDamage);
 			}
 
             // destroy particle systems after a slight delay

@@ -24,8 +24,6 @@ public class SlimeHealth : EnemyHealth
 	void Start () 
 	{
 		currentHealth = fullHealth;
-
-		damageColor = new Color (1.0f, 0.0f, 0.0f, 0.5f);
 	}
 
 	/// <summary>

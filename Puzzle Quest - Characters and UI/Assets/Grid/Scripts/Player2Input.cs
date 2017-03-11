@@ -22,22 +22,14 @@ public class Player2Input : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Mouse1) && !gameManager.coverImage2.IsActive())
+		if (Input.GetKeyDown(KeyCode.Mouse1) && timer.Second >= 0.5f &&
+			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
         {
             if (activeTile == null)
                 SelectTile();
             else
                 AttemptMove();
         }
-        /*
-        else if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            activeTile = null;
-            Destroy(go);
-        }
-        */
-
-
     }
 
     // Tries to select a tile if the players left-clicks and no other tile is selected.
@@ -71,22 +63,6 @@ public class Player2Input : MonoBehaviour
                 hitControl.Move2(activeXY);
 
                 gridManager2.SwitchTiles(hitXY, activeXY);
-
-                /*   
-                    if (gridManager.SwitchBack())
-                    {
-                        activeControl = gridManager.GetTileControl(hitXY);
-                        hitControl = gridManager.GetTileControl(activeXY);
-                        activeXY = activeControl.MyXY;
-                        hitXY = hitControl.MyXY;
-
-                        activeControl.Move(hitXY);
-                        hitControl.Move(activeXY);
-
-                        gridManager.SwitchTiles(hitXY, activeXY);
-
-                    }
-                  */
             }
             activeTile = null;
             Destroy(go);

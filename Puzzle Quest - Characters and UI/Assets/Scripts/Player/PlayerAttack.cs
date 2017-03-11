@@ -20,7 +20,7 @@ public class PlayerAttack : MonoBehaviour
 	/// <summary>
 	/// This demtermines how much damage to deal to the enemy.
 	/// </summary>
-	public float score;
+	private float score;
 
 	/// <summary>
 	/// The animation component of the player.
@@ -31,6 +31,19 @@ public class PlayerAttack : MonoBehaviour
 	/// The player movement.
 	/// </summary>
 	private PlayerMovement playerMovement;
+
+	#endregion
+
+	#region Getters and Setters
+
+	/// <summary>
+	/// Gets the score.
+	/// </summary>
+	/// <value>The score.</value>
+	public float Score
+	{
+		get { return score; }
+	}
 
 	#endregion
 
@@ -107,10 +120,12 @@ public class PlayerAttack : MonoBehaviour
 				return Constants.PhysicalAttack;
 			else if (rand == 1)
 				return Constants.FireBall;
-			else if (rand == 2)
-				return Constants.EarthSpike;
 			else
-				return Constants.IceShard;
+				return Constants.EarthSpike;
+//			else if (rand == 2)
+//				return Constants.EarthSpike;
+//			else
+//				return Constants.IceShard;
 		}
 	}
 
@@ -125,27 +140,35 @@ public class PlayerAttack : MonoBehaviour
 		score = scoreEvent.Score;
 		string attack = ChooseAttack (gameManager.stage);
 
-		EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
-		earthSpikeSpell.RaiseRocks ();
+		if (gameManager.stage == StageEnum.FourthStage)
+		{
+			anim.Play ("Attack");
+			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
+			earthSpikeSpell.RaiseRocks ();
+			return;
+		}
 
-//		if (attack == Constants.PhysicalAttack)
-//		{
-//			playerMovement.IsInMotion = true;
-//		}
-//		else if (attack == Constants.FireBall)
-//		{
-//			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
-//			fireBallSpell.ShootFireBall ();
-//		}
-//		else if (attack == Constants.EarthSpike)
-//		{
-//			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
-//			earthSpikeSpell.RaiseRocks ();
-//		}
-//		else
-//		{
-//			// TODO: Ice Shard
-//		}
+		if (attack == Constants.PhysicalAttack)
+		{
+			playerMovement.IsInMotion = true;
+		}
+		else if (attack == Constants.FireBall)
+		{
+			anim.Play ("Attack");
+			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
+			fireBallSpell.ShootFireBall ();
+		}
+		else if (attack == Constants.EarthSpike)
+		{
+			anim.Play ("Attack");
+			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
+			earthSpikeSpell.RaiseRocks ();
+		}
+		else
+		{
+			// TODO: Ice Shard
+
+		}
 	}
 
 	#endregion

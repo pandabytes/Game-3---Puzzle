@@ -46,6 +46,7 @@ public class Utils : MonoBehaviour
 	/// </summary>
 	public void Quit()
 	{
+		gameState.stage = StageEnum.FirstStage;
 		Application.Quit ();
 	}
 }

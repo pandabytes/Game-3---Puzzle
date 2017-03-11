@@ -80,10 +80,6 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (isEnemyDead)
-		{
-			chest.SetActive (true);
-		}
 	}
 
 	/// <summary>
@@ -107,7 +103,6 @@ public class GameManager : MonoBehaviour
 	/// <param name="e">E.</param>
 	private void EnemyDefeatedHandler(object sender, EventArgs e)
 	{
-		isEnemyDead = true;
 		StartCoroutine (EnemyDefeatedCoroutine ());
 	}
 
@@ -117,7 +112,7 @@ public class GameManager : MonoBehaviour
 	/// <returns>The up coroutine.</returns>
 	private IEnumerator TimesUpCoroutine()
 	{
-		// Display "Enemy's Turn" if true
+		// Display "Player's Turn" if true
 		if (!isPlayerTurn)
 		{
 			uiManager.DisplayTurn (!isPlayerTurn);
@@ -125,7 +120,13 @@ public class GameManager : MonoBehaviour
 
 		yield return new WaitForSeconds (5.0f);
 
-		// Display "Player's Turn" if true
+		if (isEnemyDead)
+		{
+			Debug.Log ("Enemy is dead");
+			yield break;
+		}
+
+		// Display "Enemy's Turn" if true
 		if (isPlayerTurn)
 		{
 			uiManager.DisplayTurn (!isPlayerTurn);

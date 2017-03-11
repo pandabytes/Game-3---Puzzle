@@ -24,6 +24,11 @@ public static class Constants
 	public const float EnemyDamage = 22.0f;
 
 	/// <summary>
+	/// The boss damage.
+	/// </summary>
+	public const float BossDamage = 30.0f;
+
+	/// <summary>
 	/// The extra damage for fire ball.
 	/// </summary>
 	public const float ExtraDamage = 10.0f;
@@ -41,7 +46,7 @@ public static class Constants
 	/// <summary>
 	/// The ice shard damage.
 	/// </summary>
-	public const float IceShardDamage = 1.7f;
+	public const float IceShardDamage = 2.0f;
 
 	#endregion
 
@@ -88,16 +93,6 @@ public static class Constants
 
 	#endregion
 
-	/// <summary>
-	/// THe amount of HP recovered from healing
-	/// </summary>
-	public const float HealAmount = 1.0f;
-
-	/// <summary>
-	/// The time limit.
-	/// </summary>
-	public const float TimeLimit = 15.0f;
-
 	#region Messages
 
 	/// <summary>
@@ -116,9 +111,19 @@ public static class Constants
 	public const string IceShardMessage = "You gain Ice Shard spell !!!";
 
 	/// <summary>
-	/// The lighting zap message.
+	/// The final message.
 	/// </summary>
-	public const string LightingZapMessage = "You gain Lighting Zap spell !!!";
+	public const string FinalMessage = "You made it through !";
 
 	#endregion
+
+	/// <summary>
+	/// THe amount of HP recovered from healing
+	/// </summary>
+	public const float HealAmount = 1.0f;
+
+	/// <summary>
+	/// The time limit.
+	/// </summary>
+	public const float TimeLimit = 15.0f;
 }

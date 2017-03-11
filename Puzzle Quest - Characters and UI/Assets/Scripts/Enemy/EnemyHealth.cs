@@ -26,7 +26,7 @@ public class EnemyHealth : MonoBehaviour
 	/// <summary>
 	/// The animation.
 	/// </summary>
-	private Animation anim;
+	protected Animation anim;
 
 	/// <summary>
 	/// The model in which contains the material to be changed when damage.
@@ -108,6 +108,24 @@ public class EnemyHealth : MonoBehaviour
 		model.GetComponent<Renderer> ().material = originalMaterial;
 	}
 
+	/// <summary>
+	/// Enemy death coroutine
+	/// </summary>
+	/// <returns>The death coroutine.</returns>
+	protected virtual IEnumerator EnemyDeathCoroutine()
+	{
+		// Play the dead animation
+		anim.Stop ();
+		anim.Play ("Dead");
+
+		yield return new WaitForSeconds (2.5f);
+
+		// Notify the game manager that this enemy has been defeated
+		OnEnemyDefeated (this, EventArgs.Empty);
+
+		gameObject.SetActive (false);
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -127,15 +145,7 @@ public class EnemyHealth : MonoBehaviour
 
 		if (currentHealth <= 0.0f)
 		{
-			// Play the dead animation
-			anim.Stop ();
-			anim.Play ("Dead");
-
-			// Notify the game manager that this enemy has been defeated
-			OnEnemyDefeated (this, EventArgs.Empty);
-
-			gameObject.SetActive (false);
-			StopCoroutine (ReceiveDamageCoroutine (damage));
+			StartCoroutine (EnemyDeathCoroutine ());
 		}
 	}
 

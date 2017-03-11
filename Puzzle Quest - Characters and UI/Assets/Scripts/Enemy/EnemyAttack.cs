@@ -44,7 +44,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// The animation component of the enemy.
 	/// </summary>
-	private Animation anim;
+	protected Animation anim;
 
 	/// <summary>
 	/// The enemy health.
@@ -77,23 +77,6 @@ public class EnemyAttack : MonoBehaviour
 			MoveTowardToPlayer ();
 		}
 		ResetToStartPosition ();
-	}
-
-	/// <summary>
-	/// Enables enemy attack.
-	/// </summary>
-	protected void EnableAttack()
-	{
-		isInMotion = true;
-	}
-
-	/// <summary>
-	/// Begin the attack process.
-	/// </summary>
-	protected void Attack()
-	{
-		MoveTowardToPlayer ();
-		ResetToStartPosition ();	
 	}
 
 	/// <summary>

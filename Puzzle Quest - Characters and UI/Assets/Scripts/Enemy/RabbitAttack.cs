@@ -112,7 +112,7 @@ public class RabbitAttack : EnemyAttack
 			gameManager.uiManager.DisplaySpellEffect (Constants.EarthSpike);
 
 			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
-			rabbitHealth.ReceiveDamage (playerAttack.score * Constants.EarthSpikeDamage);
+			rabbitHealth.ReceiveDamage (playerAttack.Score * Constants.EarthSpikeDamage);
 		}
 	}
 

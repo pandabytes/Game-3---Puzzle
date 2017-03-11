@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInput : MonoBehaviour {
 	private GridManager gridManager;
@@ -22,7 +23,8 @@ public class PlayerInput : MonoBehaviour {
 	void Update ()
 	{
 		// Make it unclickable when cover images are active
-		if (Input.GetKeyDown (KeyCode.Mouse0) && !gameManager.coverImage1.IsActive ())
+		if (Input.GetKeyDown (KeyCode.Mouse0) && timer.Second >= 0.5f && 
+			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
 		{
 			if (activeTile == null)
 				SelectTile ();
@@ -62,22 +64,6 @@ public class PlayerInput : MonoBehaviour {
                 hitControl.Move(activeXY);
 
                 gridManager.SwitchTiles(hitXY, activeXY);
-
-            /*   
-                if (gridManager.SwitchBack())
-                {
-                    activeControl = gridManager.GetTileControl(hitXY);
-                    hitControl = gridManager.GetTileControl(activeXY);
-                    activeXY = activeControl.MyXY;
-                    hitXY = hitControl.MyXY;
-
-                    activeControl.Move(hitXY);
-                    hitControl.Move(activeXY);
-
-                    gridManager.SwitchTiles(hitXY, activeXY);
-
-                }
-              */ 
             }
                 activeTile = null;
                 Destroy(go);
