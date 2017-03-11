@@ -8,23 +8,27 @@ public class PlayerInput : MonoBehaviour {
 	public LayerMask Tiles;
 	private GameObject activeTile;
     public GameObject indicator;
+	public GameManager gameManager;
+	public Timer timer;
     private GameObject go;
 
 	void Awake()
 	{
 		gridManager = GetComponent<GridManager> ();
+		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-        if (Input.GetKeyDown(KeyCode.Mouse0)) // check for null & make it unclickable when cover images are active
-        {
-            if (activeTile == null)
-                SelectTile();
-            else
-                AttemptMove();
-        }
+		// Make it unclickable when cover images are active
+		if (Input.GetKeyDown (KeyCode.Mouse0) && !gameManager.coverImage1.IsActive ())
+		{
+			if (activeTile == null)
+				SelectTile ();
+			else
+				AttemptMove ();
+		}
         /*
         else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -84,7 +88,21 @@ public class PlayerInput : MonoBehaviour {
             }
                 activeTile = null;
                 Destroy(go);
-            }
-            
+    	}        
+	}
+
+	/// <summary>
+	/// Handler for when the time expires.
+	/// Deselect a tile once the players run out of time.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void TimesUpHandler(object sender, EventArgs e)
+	{
+		if (activeTile != null)
+		{
+			activeTile = null;
+			Destroy (go);
 		}
+	}
 }

@@ -49,7 +49,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// The enemy health.
 	/// </summary>
-	private EnemyHealth enemyHealth;
+	protected EnemyHealth enemyHealth;
 
 	#endregion 
 
@@ -119,6 +119,7 @@ public class EnemyAttack : MonoBehaviour
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
 
 			// Send a notifcation to indicate that the enemy's turn has completed.
+			// Enemy doesn't need a countdown 
 			if (transform.position == startPosition)
 			{
 				timer.Second = Constants.TimeLimit;
@@ -155,11 +156,6 @@ public class EnemyAttack : MonoBehaviour
 		{
 			isInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine ());
-		}
-		else if (other.gameObject.tag == "Shield" && !gameManager.isPlayerTurn)
-		{
-			isInMotion = false;
-			anim.Stop ();
 		}
 	}
 

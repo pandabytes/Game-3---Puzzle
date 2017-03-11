@@ -4,21 +4,41 @@ using System.Collections;
 
 public class Utils : MonoBehaviour
 {
+	/// <summary>
+	/// The state of the game.
+	/// </summary>
+	public GameState gameState;
 
 	/// <summary>
-	/// Loads the first stage scene.
+	/// Replay the game in whichever scene the players lose.
 	/// </summary>
-	public void LoadFirstStageScene()
+	public void Replay()
 	{
-		SceneManager.LoadScene ("Stage 1");
+		if (gameState.stage == StageEnum.FirstStage)
+		{
+			SceneManager.LoadScene ("Stage 1");	
+		}
+		else if (gameState.stage == StageEnum.SecondStage)
+		{
+			SceneManager.LoadScene ("Stage 2");	
+		}
+		else if (gameState.stage == StageEnum.ThirdStage)
+		{
+			SceneManager.LoadScene ("Stage 3");	
+		}
+		else if (gameState.stage == StageEnum.FourthStage)
+		{
+			SceneManager.LoadScene ("Stage 4");	
+		}
 	}
 
 	/// <summary>
-	/// Loads the second stage scene.
+	/// Play the game from the beginning.
 	/// </summary>
-	public void LoadSecondStageScene()
+	public void PlayFromBeginning()
 	{
-		SceneManager.LoadScene ("Stage 2");
+		gameState.stage = StageEnum.FirstStage;
+		SceneManager.LoadScene ("Stage 1");
 	}
 
 	/// <summary>

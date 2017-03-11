@@ -23,7 +23,6 @@ public class SlimeHealth : EnemyHealth
 	// Use this for initialization
 	void Start () 
 	{
-		fullHealth = 100.0f;
 		currentHealth = fullHealth;
 
 		damageColor = new Color (1.0f, 0.0f, 0.0f, 0.5f);
@@ -34,17 +33,6 @@ public class SlimeHealth : EnemyHealth
 	/// </summary>
 	void Update()
 	{}
-
-	/// <summary>
-	/// Sets the health.
-	/// </summary>
-	/// <param name="scaledDamage">Scaled damage.</param>
-	protected override void SetHealth(float scaledDamage)
-	{
-		float y = healthBar.transform.localScale.y;
-		float z = healthBar.transform.localScale.z;
-		healthBar.transform.localScale = new Vector3 (scaledDamage, y, z);	
-	}
 
 	/// <summary>
 	/// Execute the receive damage coroutine

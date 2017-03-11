@@ -11,17 +11,17 @@ public class FireBallAttack : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown(KeyCode.F))
-		{
-			StopFiring ();
-			BeginFiring ();
-		}
+	}
+
+	public void ShootFireBall()
+	{
+		StopFiring ();
+		BeginFiring ();
 	}
 
 	/// <summary>
@@ -52,6 +52,7 @@ public class FireBallAttack : MonoBehaviour
 		}
 
 		FireProjectileScript projectileScript = fireBallObject.GetComponentInChildren<FireProjectileScript> ();
+
 		if (projectileScript != null)
 		{
 			// make sure we don't collide with other friendly layers

@@ -11,7 +11,7 @@ public class EnemyHealth : MonoBehaviour
 	/// <summary>
 	/// Full health
 	/// </summary>
-	protected float fullHealth;
+	public float fullHealth;
 
 	/// <summary>
 	/// The current health.
@@ -63,7 +63,6 @@ public class EnemyHealth : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		fullHealth = 100.0f;
 		currentHealth = fullHealth;
 		anim = gameObject.GetComponent<Animation> ();
 

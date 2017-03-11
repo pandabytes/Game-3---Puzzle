@@ -8,6 +8,7 @@ public class GridManager : MonoBehaviour {
 	public int score;
 	public Text scoreText;
 	public Timer timer;
+	public bool disableClicking;
 
 	//a simple class to handle the coordinates
 	public class XY

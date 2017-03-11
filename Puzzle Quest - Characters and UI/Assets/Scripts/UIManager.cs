@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
 	}
 
 	void Update()
-	{
+	{		
 		// Close the pop up window when user presses enter
 		if ((Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.KeypadEnter)) && IsPopUpWindowEnabled ())
 		{
@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
 		switch (stage)
 		{
 			case (StageEnum.FirstStage):
-			SceneManager.LoadScene ("Win");
+				SceneManager.LoadScene ("Stage 2");
 				break;
 			case (StageEnum.SecondStage):
 				SceneManager.LoadScene ("Stage 3");
@@ -148,6 +148,7 @@ public class UIManager : MonoBehaviour
 	private IEnumerator DisplayTurnCoroutine(bool isPlayerTurn)
 	{
 		turnText.text = (isPlayerTurn) ? "Player's Turn" : "Enemy's Turn";
+		turnText.color = (isPlayerTurn) ?  new Color (0.0f, 0.0f, 1.0f) : new Color (1.0f, 0.0f, 0.0f);
 		turnText.gameObject.SetActive (true);
 
 		yield return new WaitForSeconds (2.0f);

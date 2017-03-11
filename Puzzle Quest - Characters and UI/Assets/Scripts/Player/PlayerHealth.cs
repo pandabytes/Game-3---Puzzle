@@ -59,6 +59,11 @@ public class PlayerHealth : MonoBehaviour
 	/// </summary>
 	public GameManager gameManager;
 
+	/// <summary>
+	/// The state of the game.
+	/// </summary>
+	public GameState gameState;
+
 	#endregion
 
 	#region Getters and Setters
@@ -148,9 +153,10 @@ public class PlayerHealth : MonoBehaviour
 	{
 		anim.Stop ();
 		anim.Play ("Dead");
+		gameState.stage = gameManager.stage;
 		OnPlayerDeath (this, EventArgs.Empty);
 
-		// After 1 second, load the game over scene
+		// After 0.5 second, load the game over scene
 		yield return new WaitForSeconds (0.5f);
 		SceneManager.LoadScene ("GameOver");
 	}
@@ -201,7 +207,9 @@ public class PlayerHealth : MonoBehaviour
 	public void HealPlayer(float healAmount)
 	{
 		if (gameManager.isPlayerTurn)
+		{
 			StartCoroutine (HealPlayerCoroutine (healAmount));
+		}
 	}
 
 	#endregion

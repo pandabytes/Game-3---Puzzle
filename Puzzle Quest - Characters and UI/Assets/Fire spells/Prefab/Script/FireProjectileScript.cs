@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SY = System;
 using System.Collections;
 
 namespace DigitalRuby.PyroParticles
@@ -50,6 +51,8 @@ namespace DigitalRuby.PyroParticles
 
         private bool collided;
 
+		private PlayerAttack playerAttack;
+
         private IEnumerator SendCollisionAfterDelay()
         {
             yield return new WaitForSeconds(ProjectileColliderDelay);
@@ -63,6 +66,7 @@ namespace DigitalRuby.PyroParticles
         {
             base.Start();
 
+			playerAttack = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack> ();
             StartCoroutine(SendCollisionAfterDelay());
         }
 
@@ -82,7 +86,7 @@ namespace DigitalRuby.PyroParticles
 			if (c.gameObject.tag == "Enemy")
 			{
 				EnemyHealth enemyHealth = c.gameObject.GetComponent<EnemyHealth> ();
-				enemyHealth.ReceiveDamage (Constants.FireBallDamage);
+				enemyHealth.ReceiveDamage (playerAttack.score * Constants.FireBallDamage);
 			}
 
             // destroy particle systems after a slight delay

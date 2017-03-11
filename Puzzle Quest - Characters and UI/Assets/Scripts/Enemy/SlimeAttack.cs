@@ -26,16 +26,17 @@ public class SlimeAttack : EnemyAttack
 		isInMotion = false;
 		slimeHealth = gameObject.GetComponent<SlimeHealth> ();
 
-		InvokeRepeating ("EnableAttack", 2.0f, 6.0f);
+		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (slimeHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn)
+		if (slimeHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion)
 		{
-			Attack ();
+			MoveTowardToPlayer ();
 		}
+		ResetToStartPosition ();
 	}
 
 	/// <summary>
@@ -60,6 +61,16 @@ public class SlimeAttack : EnemyAttack
 		{
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
+
+			// Send a notifcation to indicate that the enemy's turn has completed.
+			// Enemy doesn't need a countdown 
+			if (transform.position == startPosition)
+			{
+				timer.Second = Constants.TimeLimit;
+				timer.StopTimer = false;
+				isInMotion = true;
+				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+			}
 		}
 	}
 
@@ -72,8 +83,8 @@ public class SlimeAttack : EnemyAttack
 	{
 		isInMotion = false;
 
-		yield return new WaitForSeconds(0.3f);
-		playerHealth.ReceiveDamage (Constants.PhysicalDamage);
+		yield return new WaitForSeconds(0.03f);
+		playerHealth.ReceiveDamage (Constants.EnemyDamage);
 	}
 
 	/// <summary>
@@ -88,12 +99,9 @@ public class SlimeAttack : EnemyAttack
 			isInMotion = false;
 			StartCoroutine (PhysicalAttackCoroutine ());
 		}
-		else if (other.gameObject.tag == "Shield" && !gameManager.isPlayerTurn)
-		{
-			isInMotion = false;
-		}
 		else if (other.gameObject.tag == "Rock" && gameManager.isPlayerTurn)
 		{
+			// For rabbits
 			slimeHealth.ReceiveDamage (Constants.EarthSpikeDamage);
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,17 +9,20 @@ public class Player2Input : MonoBehaviour
     public LayerMask Tiles;
     private GameObject activeTile;
     public GameObject indicator;
+	public GameManager gameManager;
+	public Timer timer;
     private GameObject go;
 
     void Awake()
     {
         gridManager2 = GetComponent<GridManager2>();
+		timer.TimesUp += new EventHandler (TimesUpHandler);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+		if (Input.GetKeyDown(KeyCode.Mouse1) && !gameManager.coverImage2.IsActive())
         {
             if (activeTile == null)
                 SelectTile();
@@ -87,6 +91,20 @@ public class Player2Input : MonoBehaviour
             activeTile = null;
             Destroy(go);
         }
-
     }
+
+	/// <summary>
+	/// Handler for when the time expires.
+	/// Deselect a tile once the players run out of time.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	private void TimesUpHandler(object sender, EventArgs e)
+	{
+		if (activeTile != null)
+		{
+			activeTile = null;
+			Destroy (go);
+		}
+	}
 }

@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public Timer timer;
 
+	/// <summary>
+	/// The stage.
+	/// </summary>
+	public StageEnum stage;
+
 
 	#endregion
 
@@ -112,6 +117,7 @@ public class GameManager : MonoBehaviour
 	/// <returns>The up coroutine.</returns>
 	private IEnumerator TimesUpCoroutine()
 	{
+		// Display "Enemy's Turn" if true
 		if (!isPlayerTurn)
 		{
 			uiManager.DisplayTurn (!isPlayerTurn);
@@ -119,6 +125,7 @@ public class GameManager : MonoBehaviour
 
 		yield return new WaitForSeconds (5.0f);
 
+		// Display "Player's Turn" if true
 		if (isPlayerTurn)
 		{
 			uiManager.DisplayTurn (!isPlayerTurn);
@@ -135,7 +142,7 @@ public class GameManager : MonoBehaviour
 	/// <param name="e">E.</param>
 	private void TimesUpHandler(object sender, EventArgs e)
 	{
-		// If the next turn is enemy's, then disable the coutdown time and reset the time
+		// If the next turn is enemy's, then disable the countdown time and reset the time
 		if (!isPlayerTurn == false)
 		{
 			timer.StopTimer = true;

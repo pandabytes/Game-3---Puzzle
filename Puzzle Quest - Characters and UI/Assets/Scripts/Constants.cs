@@ -26,12 +26,41 @@ public static class Constants
 	/// <summary>
 	/// The fire ball damage.
 	/// </summary>
-	public const float FireBallDamage = 12.0f;
+	public const float FireBallDamage = 1.2f;
 
 	/// <summary>
 	/// The earth spike damage.
 	/// </summary>
-	public const float EarthSpikeDamage = 17.6f;
+	public const float EarthSpikeDamage = 1.5f;
+
+	/// <summary>
+	/// The ice shard damage.
+	/// </summary>
+	public const float IceShardDamage = 1.7f;
+
+	#endregion
+
+	#region Attack Names
+
+	/// <summary>
+	/// The physical attack.
+	/// </summary>
+	public const string PhysicalAttack = "PhysicalAttack";
+
+	/// <summary>
+	/// The fire ball.
+	/// </summary>
+	public const string FireBall = "FireBall";
+
+	/// <summary>
+	/// The earth spike.
+	/// </summary>
+	public const string EarthSpike = "EarthSpike";
+
+	/// <summary>
+	/// The ice shard.
+	/// </summary>
+	public const string IceShard = "IceShard";
 
 	#endregion
 

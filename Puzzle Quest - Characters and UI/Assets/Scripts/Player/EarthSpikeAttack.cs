@@ -18,17 +18,18 @@ public class EarthSpikeAttack : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.R))
-		{
-			StartCoroutine (RaiseRocks ());
-		}
+	}
+
+	public void RaiseRocks()
+	{
+		StartCoroutine (RaiseRocksCoroutine ());
 	}
 
 	/// <summary>
 	/// Raises the rocks.
 	/// </summary>
 	/// <returns>The rocks.</returns>
-	private IEnumerator RaiseRocks()
+	private IEnumerator RaiseRocksCoroutine()
 	{
 		Animation anim_1 = rock_1.GetComponent<Animation> ();
 		Animation anim_2 = rock_2.GetComponent<Animation> ();

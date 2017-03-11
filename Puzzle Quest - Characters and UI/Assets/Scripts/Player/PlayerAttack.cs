@@ -20,7 +20,7 @@ public class PlayerAttack : MonoBehaviour
 	/// <summary>
 	/// This demtermines how much damage to deal to the enemy.
 	/// </summary>
-	private float score;
+	public float score;
 
 	/// <summary>
 	/// The animation component of the player.
@@ -76,15 +76,75 @@ public class PlayerAttack : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Randomly chooses an attack to execute.
+	/// </summary>
+	/// <returns>The attack.</returns>
+	/// <param name="stage">Stage.</param>
+	private string ChooseAttack(StageEnum stage)
+	{
+		int rand = UnityEngine.Random.Range (1, 11);
+
+		if (stage == StageEnum.FirstStage)
+		{
+			return Constants.PhysicalAttack;
+		}
+		else if (stage == StageEnum.SecondStage)
+		{
+			return (rand <= 3) ? Constants.FireBall : Constants.PhysicalAttack;
+		}
+		else if (stage == StageEnum.ThirdStage)
+		{
+			if (rand >= 5)
+				return Constants.PhysicalAttack;
+			else if (rand == 3 || rand == 4)
+				return Constants.FireBall;
+			else
+				return Constants.EarthSpike;
+		}
+		else
+		{
+			if (rand >= 4)
+				return Constants.PhysicalAttack;
+			else if (rand == 1)
+				return Constants.FireBall;
+			else if (rand == 2)
+				return Constants.EarthSpike;
+			else
+				return Constants.IceShard;
+		}
+	}
+
+	/// <summary>
 	/// Handle the attack event sent from the grid.
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
 	private void AttackHandler(object sender, EventArgs e)
 	{
-		playerMovement.IsInMotion = true;
 		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
 		score = scoreEvent.Score;
+		string attack = ChooseAttack (gameManager.stage);
+		Debug.Log (attack);
+
+		if (attack == Constants.PhysicalAttack)
+		{
+			playerMovement.IsInMotion = true;
+		}
+		else if (attack == Constants.FireBall)
+		{
+			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
+			fireBallSpell.ShootFireBall ();
+		}
+		else if (attack == Constants.EarthSpike)
+		{
+			// TODO: Earth spike
+			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
+			earthSpikeSpell.RaiseRocks ();
+		}
+		else
+		{
+			// TODO: Ice Shard
+		}
 	}
 
 	#endregion
