@@ -22,7 +22,7 @@ public class Player2Input : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Mouse1) && timer.Second >= 0.5f &&
+		if (Input.GetKeyDown(KeyCode.Mouse1) && timer.Second >= 0.8f &&
 			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
         {
             if (activeTile == null)

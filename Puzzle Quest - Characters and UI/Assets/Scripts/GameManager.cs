@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
 		if (!isPlayerTurn == false)
 		{
 			timer.StopTimer = true;
-			timer.Second = Constants.TimeLimit;
+			//timer.Second = Constants.TimeLimit;
 		}
 
 		coverImage1.gameObject.SetActive (!coverImage1.gameObject.activeSelf);

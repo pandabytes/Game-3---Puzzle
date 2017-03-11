@@ -120,12 +120,10 @@ public class PlayerAttack : MonoBehaviour
 				return Constants.PhysicalAttack;
 			else if (rand == 1)
 				return Constants.FireBall;
-			else
+			else if (rand == 2)
 				return Constants.EarthSpike;
-//			else if (rand == 2)
-//				return Constants.EarthSpike;
-//			else
-//				return Constants.IceShard;
+			else
+				return Constants.IceShard;
 		}
 	}
 
@@ -140,13 +138,13 @@ public class PlayerAttack : MonoBehaviour
 		score = scoreEvent.Score;
 		string attack = ChooseAttack (gameManager.stage);
 
-		if (gameManager.stage == StageEnum.FourthStage)
-		{
-			anim.Play ("Attack");
-			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
-			earthSpikeSpell.RaiseRocks ();
-			return;
-		}
+//		if (gameManager.stage == StageEnum.FourthStage)
+//		{
+//			anim.Play ("Attack");
+//			IceShardsAttack iceShardSpell = gameObject.GetComponent<IceShardsAttack> ();
+//			iceShardSpell.UnleashIce ();
+//			return;
+//		}
 
 		if (attack == Constants.PhysicalAttack)
 		{
@@ -166,8 +164,9 @@ public class PlayerAttack : MonoBehaviour
 		}
 		else
 		{
-			// TODO: Ice Shard
-
+			anim.Play ("Attack");
+			IceShardsAttack iceShardSpell = gameObject.GetComponent<IceShardsAttack> ();
+			iceShardSpell.UnleashIce ();
 		}
 	}
 

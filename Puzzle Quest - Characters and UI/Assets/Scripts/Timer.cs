@@ -48,6 +48,7 @@ public class Timer : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		// Stop the coutdown time if true
 		if (stopTimer)
 			return;
 		

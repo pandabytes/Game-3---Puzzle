@@ -146,7 +146,7 @@ public class EnemyAttack : MonoBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	protected void TimesUpHandler(object sender, EventArgs e)
+	protected virtual void TimesUpHandler(object sender, EventArgs e)
 	{
 		isInMotion = !isInMotion;
 	}

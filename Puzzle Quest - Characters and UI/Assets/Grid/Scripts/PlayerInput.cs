@@ -23,7 +23,7 @@ public class PlayerInput : MonoBehaviour {
 	void Update ()
 	{
 		// Make it unclickable when cover images are active
-		if (Input.GetKeyDown (KeyCode.Mouse0) && timer.Second >= 0.5f && 
+		if (Input.GetKeyDown (KeyCode.Mouse0) && timer.Second >= 0.8f && 
 			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
 		{
 			if (activeTile == null)

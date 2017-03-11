@@ -46,7 +46,7 @@ public static class Constants
 	/// <summary>
 	/// The ice shard damage.
 	/// </summary>
-	public const float IceShardDamage = 2.0f;
+	public const float IceShardDamage = 0.2f;
 
 	#endregion
 

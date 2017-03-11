@@ -8,6 +8,9 @@ public class FireBallAttack : MonoBehaviour
 	private FireBaseScript fireBallScript;
 	public GameObject fireBallPrefab;
 
+	private void Start()
+	{}
+
 	/// <summary>
 	/// Shoots the fire ball.
 	/// </summary>

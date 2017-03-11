@@ -9,6 +9,9 @@ public class EarthSpikeAttack : MonoBehaviour
 	public GameObject rock_4;
 	public AudioSource earthRumbleSound;
 
+	private void Start()
+	{}
+
 	/// <summary>
 	/// Raises the rocks.
 	/// </summary>

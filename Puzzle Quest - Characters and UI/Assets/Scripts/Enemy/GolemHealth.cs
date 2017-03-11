@@ -65,7 +65,7 @@ public class GolemHealth : EnemyHealth
 		anim.Stop ();
 		anim.Play ("die");
 
-		yield return new WaitForSeconds (2.5f);
+		yield return new WaitForSeconds (3.0f);
 
 		// Notify the game manager that this enemy has been defeated
 		OnEnemyDefeated (this, EventArgs.Empty);

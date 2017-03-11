@@ -16,6 +16,21 @@ public class GolemAttack : EnemyAttack
 	/// </summary>
 	private float reduceAttackDamage;
 
+	/// <summary>
+	/// Count the number of ice shards when hit.
+	/// </summary>
+	private int iceCount;
+
+	/// <summary>
+	/// Indicate if the boss is frozen or not.
+	/// </summary>
+	private bool isFrozen;
+
+	/// <summary>
+	/// The frozen ice.
+	/// </summary>
+	public GameObject frozenIce;
+
 	#endregion
 
 	#region Private Methods
@@ -24,6 +39,7 @@ public class GolemAttack : EnemyAttack
 	void Start ()
 	{
 		reduceAttackDamage = 0.0f;
+		isFrozen = false;
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
 
@@ -38,7 +54,7 @@ public class GolemAttack : EnemyAttack
 	// Update is called once per frame
 	void Update ()
 	{
-		if (golemHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion)
+		if (golemHealth.CurrentHealth > 0.0f && !gameManager.isPlayerTurn && isInMotion && !isFrozen)
 		{
 			MoveTowardToPlayer ();
 		}
@@ -99,6 +115,20 @@ public class GolemAttack : EnemyAttack
 	}
 
 	/// <summary>
+	/// Unfreezes the boss coroutine.
+	/// </summary>
+	/// <returns>The boss coroutine.</returns>
+	private IEnumerator SwitchTurnCoroutine()
+	{
+		// After 7.5 seconds, switch turn
+		yield return new WaitForSeconds (7.5f);
+		timer.Second = Constants.TimeLimit;
+		timer.StopTimer = false;
+		isInMotion = true;
+		timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+	}
+
+	/// <summary>
 	/// Raises the collision enter event.
 	/// Attack when collide the player.
 	/// </summary>
@@ -113,11 +143,53 @@ public class GolemAttack : EnemyAttack
 		else if (other.gameObject.tag == "Rock" && gameManager.isPlayerTurn)
 		{
 			// Display the spell effect
-			reduceAttackDamage = Constants.EnemyDamage / 2;
+			reduceAttackDamage = Constants.BossDamage / 2;
 			gameManager.uiManager.DisplaySpellEffect (Constants.EarthSpike);
 
 			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
 			golemHealth.ReceiveDamage (playerAttack.Score * Constants.EarthSpikeDamage);
+		}
+		else if (other.gameObject.tag == "Ice" && gameManager.isPlayerTurn)
+		{
+			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
+			golemHealth.ReceiveDamage (playerAttack.Score * Constants.IceShardDamage);
+			Destroy (other.gameObject);
+
+			iceCount++;
+
+			// Display spell effect after the last ice shard is destroyed and make boss frozen
+			if (iceCount == 10)
+			{
+				if (golemHealth.CurrentHealth > 0.0f)
+				{
+					iceCount = 0;
+					isFrozen = true;
+					frozenIce.SetActive (true);
+				}
+
+				// Display the spell effect
+				gameManager.uiManager.DisplaySpellEffect (Constants.IceShard);
+
+				StartCoroutine (SwitchTurnCoroutine ());
+			}
+		}
+	}
+
+	/// <summary>
+	/// Handler for when the time is up.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="e">E.</param>
+	protected override void TimesUpHandler(object sender, EventArgs e)
+	{
+		bool isPlayerTurn = (bool)sender;
+		isInMotion = !isInMotion;
+
+		// Unfreeze the boss when the next turn is player's
+		if (isPlayerTurn)
+		{
+			isFrozen = false;
+			frozenIce.SetActive (false);
 		}
 	}
 
