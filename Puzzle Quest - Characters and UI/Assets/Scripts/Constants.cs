@@ -16,17 +16,22 @@ public static class Constants
 	/// <summary>
 	/// The physical damage.
 	/// </summary>
-	public const float PhysicalDamage = 1.0f;
+	public const float PhysicalDamage = 100.0f;
 
 	/// <summary>
 	/// The enemy damage.
 	/// </summary>
-	public const float EnemyDamage = 22.0f;
+	public const float EnemyDamage = 220.0f;
 
 	/// <summary>
 	/// The boss damage.
 	/// </summary>
-	public const float BossDamage = 30.0f;
+	public const float BossDamage = 250.0f;
+
+	/// <summary>
+	/// The meteor damage.
+	/// </summary>
+	public const float MeteorDamage = 3.3f;
 
 	/// <summary>
 	/// The extra damage for fire ball.
@@ -46,7 +51,7 @@ public static class Constants
 	/// <summary>
 	/// The ice shard damage.
 	/// </summary>
-	public const float IceShardDamage = 0.2f;
+	public const float IceShardDamage = 0.15f;
 
 	#endregion
 
@@ -98,17 +103,17 @@ public static class Constants
 	/// <summary>
 	/// The fire ball message.
 	/// </summary>
-	public const string FireBallMessage = "You gain Fire Ball spell !!!";
+	public const string FireBallMessage = "You gain Fire Ball spell!\nEffect: deal 10 extra damage";
 
 	/// <summary>
 	/// The earth spike message.
 	/// </summary>
-	public const string EarthSpikeMessage = "You gain Earth Spike spell !!!";
+	public const string EarthSpikeMessage = "You gain Earth Spike spell!\nEffect: reduce enemy damage by half";
 
 	/// <summary>
 	/// The ice shard message.
 	/// </summary>
-	public const string IceShardMessage = "You gain Ice Shard spell !!!";
+	public const string IceShardMessage = "You gain Ice Shard spell!\nEffect: enemy is unable to attack for 1 turn";
 
 	/// <summary>
 	/// The final message.
@@ -120,7 +125,7 @@ public static class Constants
 	/// <summary>
 	/// THe amount of HP recovered from healing
 	/// </summary>
-	public const float HealAmount = 1.0f;
+	public const float HealAmount = 0.7f;
 
 	/// <summary>
 	/// The time limit.

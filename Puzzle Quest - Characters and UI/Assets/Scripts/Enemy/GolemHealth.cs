@@ -32,7 +32,7 @@ public class GolemHealth : EnemyHealth
 	/// </summary>
 	void Update()
 	{
-		if (currentHealth > 0.0f && !(anim.IsPlaying ("hit2") || anim.IsPlaying ("damage") || anim.IsPlaying ("walk")))
+		if (currentHealth > 0.0f && !(anim.IsPlaying ("hit2") || anim.IsPlaying ("damage") || anim.IsPlaying ("walk") || anim.IsPlaying("rage")))
 			anim.Play ("idle");
 	}
 

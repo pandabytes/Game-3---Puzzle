@@ -66,6 +66,19 @@ namespace DigitalRuby.PyroParticles
 
         private float elapsedSecond = 1.0f;
 
+		/// <summary>
+		/// The golem attack.
+		/// </summary>
+		private GolemAttack golemAttack;
+
+		private void Start()
+		{
+			if (GameObject.Find ("Golem") != null)
+			{
+				golemAttack = GameObject.Find ("Golem").GetComponent<GolemAttack> ();
+			}
+		}
+
         private IEnumerator SpawnMeteor()
         {
             {
@@ -192,6 +205,13 @@ namespace DigitalRuby.PyroParticles
                 pos = col.contacts[0].point;
                 normal = col.contacts[0].normal;
             }
+
+			// Damage player
+			if (col.gameObject.tag == "Player")
+			{
+				PlayerHealth playerHealth = col.gameObject.GetComponent<PlayerHealth> ();
+				playerHealth.ReceiveDamage (Constants.MeteorDamage - golemAttack.ReduceAttackDamage);
+			}
 
             MeteorExplosionParticleSystem.transform.position = pos;
             MeteorExplosionParticleSystem.transform.rotation = Quaternion.LookRotation(normal);

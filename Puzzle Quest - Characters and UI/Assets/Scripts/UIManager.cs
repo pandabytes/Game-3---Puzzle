@@ -22,11 +22,12 @@ public class UIManager : MonoBehaviour
 	public Text player2_instruction;
 	public Text instruction;
 	public Text countDown;
+	public Text stageNameText;
 	public Timer timer;
 	public GridManager gridManager;
 	public GridManager2 gridManager2;
+	public float time;
 	private bool gameStart;
-	private float time;
 
 	// Pop up window
 	private float savedTimeScale;
@@ -46,7 +47,6 @@ public class UIManager : MonoBehaviour
 	void Start()
 	{
 		gameStart = false;
-		time = 6.0f;
 		okButton.onClick.AddListener (ClickOk);
 		SetMessage ();
 	}
@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviour
 			player2_instruction.gameObject.SetActive (false);
 			instruction.gameObject.SetActive (false);
 			countDown.gameObject.SetActive (false);
+			stageNameText.gameObject.SetActive (false);
 			timer.enabled = true;
 
 			gridManager.score = 0;
@@ -135,6 +136,7 @@ public class UIManager : MonoBehaviour
 				SceneManager.LoadScene ("Stage 3");
 				break;
 			case (StageEnum.ThirdStage):
+				Destroy (GameObject.FindGameObjectWithTag ("Music"));
 				SceneManager.LoadScene ("Stage 4");
 				break;
 			case (StageEnum.FourthStage):

@@ -70,11 +70,11 @@ public class GameManager : MonoBehaviour
 		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);
 		timer.TimesUp += new EventHandler (TimesUpHandler);
 
+		// Set the cover images to be a little bit transparent
 		Color tempColor = coverImage1.color;
 		tempColor.a = 0.8f;
 		coverImage1.color = tempColor;
 		coverImage2.color = tempColor;
-
 	}
 	
 	// Update is called once per frame
@@ -122,7 +122,6 @@ public class GameManager : MonoBehaviour
 
 		if (isEnemyDead)
 		{
-			Debug.Log ("Enemy is dead");
 			yield break;
 		}
 

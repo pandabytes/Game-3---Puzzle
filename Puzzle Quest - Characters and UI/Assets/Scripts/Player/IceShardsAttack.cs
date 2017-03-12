@@ -4,6 +4,7 @@ using System.Collections;
 public class IceShardsAttack : MonoBehaviour
 {
 	public GameObject iceShardsPrefab;
+	public AudioSource iceShatterSound;
 
 	// Use this for initialization
 	void Start ()
@@ -15,6 +16,8 @@ public class IceShardsAttack : MonoBehaviour
 	/// </summary>
 	public void UnleashIce()
 	{
+		iceShatterSound.Play ();
+
 		float yRot = transform.rotation.eulerAngles.y;
 		Vector3 forwardY = Quaternion.Euler (0.0f, yRot, 0.0f) * Vector3.forward;
 		Vector3 forward = transform.forward;

@@ -43,6 +43,11 @@ public class EnemyHealth : MonoBehaviour
 	/// </summary>
 	public Material originalMaterial;
 
+	/// <summary>
+	/// The game manager.
+	/// </summary>
+	public GameManager gameManager;
+
 	#endregion
 
 	#region Getters and Setters
