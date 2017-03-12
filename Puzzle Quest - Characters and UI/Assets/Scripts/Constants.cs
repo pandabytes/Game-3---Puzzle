@@ -16,17 +16,17 @@ public static class Constants
 	/// <summary>
 	/// The physical damage.
 	/// </summary>
-	public const float PhysicalDamage = 100.0f;
+	public const float PhysicalDamage = 1.0f;
 
 	/// <summary>
 	/// The enemy damage.
 	/// </summary>
-	public const float EnemyDamage = 220.0f;
+	public const float EnemyDamage = 22.0f;
 
 	/// <summary>
 	/// The boss damage.
 	/// </summary>
-	public const float BossDamage = 250.0f;
+	public const float BossDamage = 26.0f;
 
 	/// <summary>
 	/// The meteor damage.
