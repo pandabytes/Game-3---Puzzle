@@ -1,11 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle Quest - Characters and UI", "Assembly-CSharp.csproj", "{41F32D00-4949-AF6A-C1DE-13CE200B889C}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle Quest - Characters and UI.CSharp", "Puzzle Quest - Characters and UI.CSharp.csproj", "{09E48C28-3FE9-4402-9F47-21BC3ECF50B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle Quest - Characters and UI", "Assembly-CSharp-Editor.csproj", "{A7C30451-E29D-109C-692F-BFC2A982877A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle Quest - Characters and UI", "Assembly-UnityScript.unityproj", "{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzle Quest - Characters and UI.CSharp.Editor", "Puzzle Quest - Characters and UI.CSharp.Editor.csproj", "{21888B01-32B2-5C7E-D104-62455A424F47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,23 +11,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{41F32D00-4949-AF6A-C1DE-13CE200B889C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41F32D00-4949-AF6A-C1DE-13CE200B889C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41F32D00-4949-AF6A-C1DE-13CE200B889C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41F32D00-4949-AF6A-C1DE-13CE200B889C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A7C30451-E29D-109C-692F-BFC2A982877A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7C30451-E29D-109C-692F-BFC2A982877A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7C30451-E29D-109C-692F-BFC2A982877A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7C30451-E29D-109C-692F-BFC2A982877A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADB76A8B-291B-0558-98F1-C7F7F6A182E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E48C28-3FE9-4402-9F47-21BC3ECF50B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E48C28-3FE9-4402-9F47-21BC3ECF50B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E48C28-3FE9-4402-9F47-21BC3ECF50B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E48C28-3FE9-4402-9F47-21BC3ECF50B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21888B01-32B2-5C7E-D104-62455A424F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21888B01-32B2-5C7E-D104-62455A424F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21888B01-32B2-5C7E-D104-62455A424F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21888B01-32B2-5C7E-D104-62455A424F47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal

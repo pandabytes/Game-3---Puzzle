@@ -136,14 +136,7 @@ public class PlayerAttack : MonoBehaviour
 	{
 		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
 		score = scoreEvent.Score;
-		if (gameManager.stage == StageEnum.FourthStage)
-		{
-			anim.Play ("Attack");
-			IceShardsAttack iceShardSpell = gameObject.GetComponent<IceShardsAttack> ();
-			iceShardSpell.UnleashIce ();
-			return;
-		}
-
+		
 		// Randomly choose an attack
 		string attack = ChooseAttack (gameManager.stage);
 		if (attack == Constants.PhysicalAttack)
