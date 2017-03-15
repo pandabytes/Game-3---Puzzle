@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class Timer : MonoBehaviour 
+public class Timer : NetworkBehaviour 
 {
 	#region Member Variables
 
@@ -58,8 +59,11 @@ public class Timer : MonoBehaviour
 			second = Constants.TimeLimit;
 			stopTimer = true;
 
-			// Send notifcation to indicate whose turn is next
-			OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+			if (isServer)
+			{
+				// Send notifcation to indicate whose turn is next
+				EventTimesUp (!gameManager.isPlayerTurn);
+			}
 		}
 
 		SetTimerText ();
@@ -105,7 +109,13 @@ public class Timer : MonoBehaviour
 	/// <summary>
 	/// Occurs when the time is up (15 seconds).
 	/// </summary>
+	//[SyncEvent]
 	public event EventHandler TimesUp;
+
+	public delegate void TimesUpDelegate(bool isPlayerTurn);
+
+	[SyncEvent]
+	public event TimesUpDelegate EventTimesUp;
 
 	/// <summary>
 	/// Raises the times up event.

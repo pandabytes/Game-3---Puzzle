@@ -19,7 +19,7 @@ public class PlayerInput : NetworkBehaviour {
 	{
 		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 		gridManager = GetComponent<GridManager> ();
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.TimesUp += EventTimesUpHandler;
 	}
 
 	// Update is called once per frame
@@ -82,7 +82,7 @@ public class PlayerInput : NetworkBehaviour {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void TimesUpHandler(object sender, EventArgs e)
+	private void EventTimesUpHandler(object isPlayerTurn, EventArgs e)
 	{
 		if (activeTile != null)
 		{

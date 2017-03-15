@@ -33,7 +33,7 @@ public class Player2Input : NetworkBehaviour
 		playerNetwork1.player2 = this;
 		playerNetwork2.player2 = this;
         gridManager2 = GetComponent<GridManager2>();
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.TimesUp += EventTimesUpHandler;
     }
 
     // Update is called once per frame
@@ -114,7 +114,7 @@ public class Player2Input : NetworkBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void TimesUpHandler(object sender, EventArgs e)
+	private void EventTimesUpHandler(object isPlayerTurn, EventArgs e)
 	{
 		if (activeTile != null)
 		{

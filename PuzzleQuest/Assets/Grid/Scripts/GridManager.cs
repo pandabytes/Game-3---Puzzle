@@ -7,7 +7,12 @@ using UnityEngine.Networking;
 
 public class GridManager : NetworkBehaviour
 {
+	[SyncVar]
 	public int score;
+
+	[SyncVar(hook = "OnScoreChange")]
+	private string scoreString;
+
 	public Text scoreText;
 	public Timer timer;
 	public PlayerNetwork playerNetwork;
@@ -53,8 +58,13 @@ public class GridManager : NetworkBehaviour
 
 	private int movingTiles;
 
+	/// <summary>
+	/// Awake this instance.
+	/// </summary>
 	void Awake()
 	{
+		timer.EventTimesUp += EventTimesUpHandler;
+
 		// Server creates 1st grid
 		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 		if (!playerNetwork.IsServerAndLocal())
@@ -62,7 +72,24 @@ public class GridManager : NetworkBehaviour
 		
 		CreateGrid ();
 		CheckMatches ();
-		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
+		//timer.TimesUp += new SY.EventHandler (TimesUpHandler);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="isPlayerTurn">If set to <c>true</c> is player turn.</param>
+	private void EventTimesUpHandler(bool isPlayerTurn)
+	{
+		// Do not deal damage is score is <= 0
+		if (score > 0)
+		{
+			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float) score);
+			OnAttack (this, scoreEvent);
+
+			score = 0;
+			scoreText.text = score.ToString();
+		}
 	}
 		
 	void CreateGrid()
@@ -214,13 +241,14 @@ public class GridManager : NetworkBehaviour
 	private void TimesUpHandler(object sender, SY.EventArgs e)
 	{
 		// Do not deal damage is score is <= 0
+		Debug.Log("attack score: " + score.ToString());
 		if (score > 0)
 		{
 			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float) score);
 			OnAttack (this, scoreEvent);
 
 			score = 0;
-			scoreText.text = score.ToString();
+			scoreString = score.ToString ();
 		}
 	}
 
@@ -237,7 +265,15 @@ public class GridManager : NetworkBehaviour
 	void AddScore (int amount)
 	{
 		score += amount;
-		scoreText.text = score.ToString();
+		scoreString = score.ToString ();
+	}
+
+	/// <summary>
+	/// Call this method when scoreString changes
+	/// </summary>
+	void OnScoreChange(string s)
+	{
+		scoreText.text = s;
 	}
 
 	void ReplaceTiles()

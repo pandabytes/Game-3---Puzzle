@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class PlayerHealth : MonoBehaviour 
+public class PlayerHealth : NetworkBehaviour 
 {
 	#region Member variables
 
@@ -18,16 +18,19 @@ public class PlayerHealth : MonoBehaviour
 	/// <summary>
 	/// The current health.
 	/// </summary>
+	[SyncVar]
 	private float currentHealth;
 
 	/// <summary>
 	/// Indicate whether the player is damaged.
 	/// </summary>
+	[SyncVar]
 	private bool isDamaged;
 
 	/// <summary>
 	/// The color of the flash.
 	/// </summary>
+	[SyncVar]
 	private Color flashColor;
 
 	/// <summary>

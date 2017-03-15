@@ -7,9 +7,14 @@ using SY = System;
 
 public class GridManager2 : NetworkBehaviour
 {
+	[SyncVar]
 	public int score;
-    public int distanceFromOtherBoard;
+
+	[SyncVar(hook = "OnScoreChange")]
+	private string scoreString;
+
 	public Text scoreText;
+    public int distanceFromOtherBoard;
 	public Timer timer;
 	public PlayerNetwork playerNetwork;
 
@@ -56,6 +61,8 @@ public class GridManager2 : NetworkBehaviour
 
     void Awake()
     {
+		timer.EventTimesUp += EventTimesUpHandler;
+
 		// Server creates 2nd grid
 		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 		if (!playerNetwork.IsServerAndLocal())
@@ -63,7 +70,6 @@ public class GridManager2 : NetworkBehaviour
 		
         CreateGrid();
         CheckMatches();
-		timer.TimesUp += new SY.EventHandler (TimesUpHandler);
     }
 
     void CreateGrid()
@@ -229,6 +235,31 @@ public class GridManager2 : NetworkBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="isPlayerTurn">If set to <c>true</c> is player turn.</param>
+	private void EventTimesUpHandler(bool isPlayerTurn)
+	{
+		// Do not deal damage is score is <= 0
+		if (score > 0)
+		{
+			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float) score);
+			OnHeal (this, scoreEvent);
+
+			score = 0;
+			scoreString = score.ToString ();
+		}
+	}
+
+	/// <summary>
+	/// Call this method when scoreString changes
+	/// </summary>
+	void OnScoreChange(string s)
+	{
+		scoreText.text = s;
+	}
+
     void DestroyMatches(List<XY2> tilesToDestroy)
     {
         for (int i = 0; i < tilesToDestroy.Count; i++)
@@ -242,7 +273,7 @@ public class GridManager2 : NetworkBehaviour
     void AddScore(int amount)
     {
         score += amount;
-		scoreText.text = score.ToString();
+		scoreString = score.ToString ();
     }
 
     void ReplaceTiles()

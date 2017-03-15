@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PlayerAttack : MonoBehaviour 
+public class PlayerAttack : NetworkBehaviour 
 {
 	#region Member variables
 
