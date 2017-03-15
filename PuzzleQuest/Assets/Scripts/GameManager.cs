@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
 	#region Member Variables
 
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 		isEnemyDead = false;
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth> ();
 		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.EventTimesUp +=  TimesUpHandler;
 
 		// Set the cover images to be a little bit transparent
 		Color tempColor = coverImage1.color;
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void TimesUpHandler(object sender, EventArgs e)
+	private void TimesUpHandler(bool nextTurn)
 	{
 		// If the next turn is enemy's, then disable the countdown time and reset the time
 		if (!isPlayerTurn == false)

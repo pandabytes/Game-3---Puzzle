@@ -18,7 +18,7 @@ public class PlayerHealth : NetworkBehaviour
 	/// <summary>
 	/// The current health.
 	/// </summary>
-	[SyncVar]
+	[SyncVar(hook = "OnCurrentHealth")]
 	private float currentHealth;
 
 	/// <summary>
@@ -30,7 +30,6 @@ public class PlayerHealth : NetworkBehaviour
 	/// <summary>
 	/// The color of the flash.
 	/// </summary>
-	[SyncVar]
 	private Color flashColor;
 
 	/// <summary>
@@ -88,9 +87,9 @@ public class PlayerHealth : NetworkBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		anim = gameObject.GetComponent<Animation> ();
 		fullHealth = 100.0f;
 		currentHealth = fullHealth;
-		anim = gameObject.GetComponent<Animation> ();
 
 		isDamaged = false;
 		damageImage.color = Color.clear;
@@ -175,6 +174,28 @@ public class PlayerHealth : NetworkBehaviour
 		HealPlayer (Constants.HealAmount * scoreEvent.Score);
 	}
 
+	/// <summary>
+	/// Call this when current health is changed on the server.
+	/// Update the health bar on the client side.
+	/// </summary>
+	/// <param name="c">C.</param>
+	private void OnCurrentHealth(float c)
+	{		
+		if (c < currentHealth)
+		{
+			anim.Stop ();
+			anim.Play ("Damage");
+		}
+	
+		currentHealth = c;
+		SetHealth (currentHealth / fullHealth);
+
+		if (currentHealth <= 0.0f)
+		{
+			StartCoroutine (PlayerDeathCoroutine ());
+		}
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -185,6 +206,9 @@ public class PlayerHealth : NetworkBehaviour
 	/// <param name="damage">Damage amount.</param>
 	public void CmdReceiveDamage(float damage)
 	{
+		if (!isServer)
+			return; 
+		
 		if (currentHealth > 0.0f)
 		{
 			isDamaged = true;

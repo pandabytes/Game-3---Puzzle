@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyAttack : NetworkBehaviour
 {
 	#region Member Variables
 
@@ -40,6 +40,7 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// Flag indicate whether enemy is in motion (aka moving).
 	/// </summary>
+	[SyncVar]
 	protected bool isInMotion;
 
 	/// <summary>
@@ -67,7 +68,7 @@ public class EnemyAttack : MonoBehaviour
 		anim = gameObject.GetComponent<Animation> ();
 		enemyHealth = gameObject.GetComponent<EnemyHealth> ();
 
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.EventTimesUp += TimesUpHandler;
 	}
 
 	// Update is called once per frame
@@ -101,14 +102,22 @@ public class EnemyAttack : MonoBehaviour
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
 
-			// Send a notifcation to indicate that the enemy's turn has completed.
+			// Only server can send a notifcation to indicate that the enemy's turn has completed.
 			// Enemy doesn't need a countdown 
 			if (transform.position == startPosition)
 			{
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
-				isInMotion = true;
-				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+
+				if (isServer)
+				{
+					isInMotion = true;
+					timer.OnTimesUp (!gameManager.isPlayerTurn);
+				}
+				else
+				{
+					isInMotion = false;
+				}
 			}
 		}
 	}
@@ -145,10 +154,24 @@ public class EnemyAttack : MonoBehaviour
 	/// <summary>
 	/// Handler for when the time is up.
 	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="e">E.</param>
-	protected virtual void TimesUpHandler(object sender, EventArgs e)
+	/// <param name="isPlayerTurn">Boolean indicate whose turn is next</param>
+	protected virtual void TimesUpHandler(bool isPlayerTurn)
 	{
+		// For client
+		if (isClient)
+		{
+			if (isPlayerTurn)
+			{
+				isInMotion = false;
+			}
+			else
+			{
+				isInMotion = true;
+			}
+			return;
+		}
+
+		// For server
 		isInMotion = !isInMotion;
 	}
 

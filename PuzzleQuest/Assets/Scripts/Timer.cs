@@ -9,7 +9,10 @@ public class Timer : NetworkBehaviour
 {
 	#region Member Variables
 
+	[SyncVar]
 	private float second;
+
+	[SyncVar]
 	private bool stopTimer;
 
 	private string timeFormat;
@@ -62,7 +65,7 @@ public class Timer : NetworkBehaviour
 			if (isServer)
 			{
 				// Send notifcation to indicate whose turn is next
-				EventTimesUp (!gameManager.isPlayerTurn);
+				OnTimesUp (!gameManager.isPlayerTurn);
 			}
 		}
 
@@ -122,11 +125,11 @@ public class Timer : NetworkBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	public virtual void OnTimesUp(object sender, EventArgs e)
+	public virtual void OnTimesUp(bool isPlayerTurn)
 	{
-		if (TimesUp != null)
+		if (EventTimesUp != null)
 		{
-			TimesUp (sender, e);
+			EventTimesUp (isPlayerTurn);
 		}
 	}
 

@@ -25,7 +25,7 @@ public class SlimeAttack : EnemyAttack
 		isInMotion = false;
 		slimeHealth = gameObject.GetComponent<SlimeHealth> ();
 
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		//timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 	
 	// Update is called once per frame
@@ -68,7 +68,7 @@ public class SlimeAttack : EnemyAttack
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
 				isInMotion = true;
-				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+				//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
 			}
 		}
 	}

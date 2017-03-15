@@ -80,7 +80,7 @@ public class GolemAttack : EnemyAttack
 		meteorsAttack = gameObject.GetComponent<MeteorsAttack> ();
 		roarAudio = gameObject.GetComponent<AudioSource> ();
 
-		timer.TimesUp += new EventHandler (TimesUpHandler);
+		//timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
 
 	// Update is called once per frame
@@ -121,7 +121,7 @@ public class GolemAttack : EnemyAttack
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
 				isInMotion = true;
-				timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+				//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
 			}
 		}
 	}
@@ -152,7 +152,7 @@ public class GolemAttack : EnemyAttack
 		timer.Second = Constants.TimeLimit;
 		timer.StopTimer = false;
 		isInMotion = true;
-		timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+		//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
 	}
 
 	/// <summary>
@@ -255,9 +255,8 @@ public class GolemAttack : EnemyAttack
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	protected override void TimesUpHandler(object sender, EventArgs e)
+	protected override void TimesUpHandler(bool isPlayerTurn)
 	{
-		bool isPlayerTurn = (bool)sender;
 
 		// If next turn is the enemy's turn, then make enemy attack
 		if (!isPlayerTurn)

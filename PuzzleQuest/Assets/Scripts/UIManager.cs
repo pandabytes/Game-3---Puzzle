@@ -2,8 +2,9 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class UIManager : MonoBehaviour
+public class UIManager : NetworkBehaviour
 {
 	#region Member Variables
 
@@ -26,7 +27,11 @@ public class UIManager : MonoBehaviour
 	public Timer timer;
 	public GridManager gridManager;
 	public GridManager2 gridManager2;
+
+	[SyncVar]
 	public float time;
+
+	[SyncVar]
 	private bool gameStart;
 
 	// Pop up window
@@ -122,11 +127,15 @@ public class UIManager : MonoBehaviour
 	/// </summary>
 	private void ClickOk()
 	{
+		if (!isServer)
+			return;
+		
 		Time.timeScale = savedTimeScale;
 		popUpWindow.gameObject.SetActive (false);
 		okButton.gameObject.SetActive (false);
 		message.gameObject.SetActive (false);
 
+		// Only server can change scene
 		switch (stage)
 		{
 			case (StageEnum.FirstStage):

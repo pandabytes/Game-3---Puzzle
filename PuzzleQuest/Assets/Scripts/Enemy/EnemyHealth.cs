@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Networking;
 
-public class EnemyHealth : MonoBehaviour 
+public class EnemyHealth : NetworkBehaviour 
 {
 	#region Member variables
 
@@ -16,6 +17,7 @@ public class EnemyHealth : MonoBehaviour
 	/// <summary>
 	/// The current health.
 	/// </summary>
+	[SyncVar(hook = "OnCurrentHealth")]
 	protected float currentHealth;
 
 	/// <summary>
@@ -131,6 +133,28 @@ public class EnemyHealth : MonoBehaviour
 		gameObject.SetActive (false);
 	}
 
+	/// <summary>
+	/// Call this when current health is changed on the server.
+	/// Update the health bar on the client side.
+	/// </summary>
+	/// <param name="c">C.</param>
+	protected virtual void OnCurrentHealth(float c)
+	{
+		if (c < currentHealth)
+		{
+			anim.Stop ();
+			anim.Play ("Damage");
+		}
+
+		currentHealth = c;
+		SetHealth (currentHealth / fullHealth);
+
+		if (currentHealth <= 0.0f)
+		{
+			StartCoroutine (EnemyDeathCoroutine ());
+		}
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -141,6 +165,9 @@ public class EnemyHealth : MonoBehaviour
 	/// <param name="damage">Damage.</param>
 	public virtual void ReceiveDamage(float damage)
 	{
+		if (!isServer)
+			return;
+		
 		if (currentHealth > 0.0f)
 		{
 			anim.Stop ();
