@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using SY = System;
 
-public class GridManager2 : MonoBehaviour
+public class GridManager2 : NetworkBehaviour
 {
 	public int score;
     public int distanceFromOtherBoard;
@@ -55,10 +56,10 @@ public class GridManager2 : MonoBehaviour
 
     void Awake()
     {
-		// Client creates 2nd grid
-//		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-//		if (playerNetwork.IsServerAndLocal())
-//			return;
+		// Server creates 2nd grid
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+		if (playerNetwork.IsServerAndLocal())
+			return;
 		
         CreateGrid();
         CheckMatches();
@@ -80,6 +81,7 @@ public class GridManager2 : MonoBehaviour
                 tileControl.GridManager2 = this;
                 tileControl.MyXY2 = new XY2(x, y);
                 go.name = x + "/" + y;
+				NetworkServer.Spawn(go);
             }
         }
     }
@@ -261,6 +263,8 @@ public class GridManager2 : MonoBehaviour
                 tileControl.Move2(new XY2(x, tileY));
                 Grid[x, tileY] = new Tile2(randomTileType, go, tileControl);
                 go.name = x + "/" + tileY;
+
+				NetworkServer.Spawn(go);
             }
         }
         //CheckForLegalMoves();

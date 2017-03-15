@@ -56,9 +56,9 @@ public class GridManager : NetworkBehaviour
 	void Awake()
 	{
 		// Server creates 1st grid
-//		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-//		if (!playerNetwork.IsServerAndLocal())
-//			return;
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+		if (!playerNetwork.IsServerAndLocal())
+			return;
 		
 		CreateGrid ();
 		CheckMatches ();
@@ -80,6 +80,8 @@ public class GridManager : NetworkBehaviour
 				tileControl.GridManager = this;
 				tileControl.MyXY = new XY(x,y);
 				go.name = x + "/" + y;
+
+				NetworkServer.Spawn(go);
 			}
 		}
 	}
@@ -260,6 +262,8 @@ public class GridManager : NetworkBehaviour
 				tileControl.Move(new XY(x, tileY));
 				Grid[x, tileY] = new Tile(randomTileType, go, tileControl);
 				go.name = x + "/" + tileY;
+
+				NetworkServer.Spawn(go);
 			}
 		}
 	}

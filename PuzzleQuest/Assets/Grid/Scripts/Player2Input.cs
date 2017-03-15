@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Player2Input : MonoBehaviour
+public class Player2Input : NetworkBehaviour
 {
     private GridManager2 gridManager2;
     public LayerMask Tiles;
@@ -11,10 +12,12 @@ public class Player2Input : MonoBehaviour
     public GameObject indicator;
 	public GameManager gameManager;
 	public Timer timer;
+	public PlayerNetwork playerNetwork;
     private GameObject go;
 
     void Awake()
     {
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
         gridManager2 = GetComponent<GridManager2>();
 		timer.TimesUp += new EventHandler (TimesUpHandler);
     }
@@ -22,6 +25,9 @@ public class Player2Input : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (playerNetwork.IsServerAndLocal ())
+			return;
+		
 		if (Input.GetKeyDown(KeyCode.Mouse1) && timer.Second >= 0.8f &&
 			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
         {

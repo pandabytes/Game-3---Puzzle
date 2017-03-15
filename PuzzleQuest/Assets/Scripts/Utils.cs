@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using Prototype.NetworkLobby;
 
-public class Utils : MonoBehaviour
+public class Utils : NetworkBehaviour
 {
 	/// <summary>
 	/// The state of the game.
@@ -15,12 +15,7 @@ public class Utils : MonoBehaviour
 
 	void Start()
 	{
-		//playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-	}
-
-	void Update()
-	{
-
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 	}
 
 	/// <summary>
@@ -51,22 +46,22 @@ public class Utils : MonoBehaviour
 	/// </summary>
 	public void PlayFromBeginning()
 	{
-//		if (GameObject.FindGameObjectWithTag("Lobby Player") == null)
-//		{
-//			Debug.Log ("Lobby player is NULL");
-//			return;
-//		}
-//
-//		// Only server can start the game
-//		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-//		if (playerNetwork.IsServerAndLocal())
-//		{
-//			gameState.stage = StageEnum.FirstStage;
-//			LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
-//			lobbyManager.ServerChangeScene ("Stage 1");
-//		}
+		if (GameObject.FindGameObjectWithTag("Lobby Player") == null)
+		{
+			Debug.Log ("Lobby player is NULL");
+			return;
+		}
 
-		SceneManager.LoadScene ("Stage 1");
+		// Only server can start the game
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+		if (playerNetwork.IsServerAndLocal())
+		{
+			gameState.stage = StageEnum.FirstStage;
+			LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+			lobbyManager.ServerChangeScene ("Stage 1");
+		}
+
+		//SceneManager.LoadScene ("Stage 1");
 	}
 
 	/// <summary>

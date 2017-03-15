@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class PlayerInput : MonoBehaviour {
+public class PlayerInput : NetworkBehaviour {
 	private GridManager gridManager;
 	public LayerMask Tiles;
 	private GameObject activeTile;
@@ -17,7 +17,7 @@ public class PlayerInput : MonoBehaviour {
 
 	void Awake()
 	{
-		//playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 		gridManager = GetComponent<GridManager> ();
 		timer.TimesUp += new EventHandler (TimesUpHandler);
 	}
@@ -25,8 +25,8 @@ public class PlayerInput : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-//		if (!playerNetwork.IsServerAndLocal ())
-//			return;
+		if (!playerNetwork.IsServerAndLocal ())
+			return;
 		
 		// Make it unclickable when cover images are active
 		if (Input.GetKeyDown (KeyCode.Mouse0) && timer.Second >= 0.8f && 
