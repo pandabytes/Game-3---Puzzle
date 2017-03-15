@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class TileControl2 : MonoBehaviour {
-    public GridManager2 GridManager2;
+public class TileControl2 : NetworkBehaviour {
+	
+	public GridManager2 GridManager2;
     public GridManager2.XY2 MyXY2;
     public int distanceFromOtherBoard;
 
+	//[Command]
     public void Move2(GridManager2.XY2 xy)
     {
         StartCoroutine(Moving2(xy));

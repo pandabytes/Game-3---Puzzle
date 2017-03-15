@@ -58,7 +58,7 @@ public class GridManager2 : NetworkBehaviour
     {
 		// Server creates 2nd grid
 		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-		if (playerNetwork.IsServerAndLocal())
+		if (!playerNetwork.IsServerAndLocal())
 			return;
 		
         CreateGrid();
@@ -80,7 +80,9 @@ public class GridManager2 : NetworkBehaviour
                 Grid[x, y] = new Tile2(randomTileType, go, tileControl);
                 tileControl.GridManager2 = this;
                 tileControl.MyXY2 = new XY2(x, y);
-                go.name = x + "/" + y;
+				go.name = x + "/" + y;
+				go.tag = "Tile2";
+
 				NetworkServer.Spawn(go);
             }
         }
@@ -186,8 +188,10 @@ public class GridManager2 : NetworkBehaviour
 			AddScore (tilesToDestroy.Count);	
 			DestroyMatches (tilesToDestroy);
 		}
-        else
-            ReplaceTiles();
+		else
+		{
+			ReplaceTiles ();
+		}
     }
 
 	/// <summary>
@@ -262,12 +266,12 @@ public class GridManager2 : NetworkBehaviour
                 tileControl.GridManager2 = this;
                 tileControl.Move2(new XY2(x, tileY));
                 Grid[x, tileY] = new Tile2(randomTileType, go, tileControl);
-                go.name = x + "/" + tileY;
+				go.name = x + "/" + tileY;
+				go.tag = "Tile2";
 
 				NetworkServer.Spawn(go);
             }
         }
-        //CheckForLegalMoves();
     }
 
     void GravityCheck()

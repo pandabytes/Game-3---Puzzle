@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour
 {
-	public GameObject stageOnePrefab;
+	public Player2Input player2;
 
 	// Use this for initialization
 	void Start ()
@@ -22,6 +22,18 @@ public class PlayerNetwork : NetworkBehaviour
 		{
 			Debug.Log ("Local Player: " + isLocalPlayer + ", Server: " + isServer);
 		}
+	}
+
+	/// <summary>
+	/// Update the client's move changes to the server
+	/// </summary>
+	/// <param name="activeTileNetworkID">Active tile network ID.</param>
+	/// <param name="tileToSwapNetworkID">Tile to swap network ID.</param>
+	[Command]
+	public void CmdAttempMove(NetworkIdentity activeTileNetworkID, NetworkIdentity tileToSwapNetworkID)
+	{
+		object t = this;
+		player2.AttemptMove (activeTileNetworkID, tileToSwapNetworkID);
 	}
 
 	/// <summary>

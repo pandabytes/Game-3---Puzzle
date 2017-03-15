@@ -80,7 +80,7 @@ public class GridManager : NetworkBehaviour
 				tileControl.GridManager = this;
 				tileControl.MyXY = new XY(x,y);
 				go.name = x + "/" + y;
-
+				go.tag = "Tile1";
 				NetworkServer.Spawn(go);
 			}
 		}
@@ -262,7 +262,7 @@ public class GridManager : NetworkBehaviour
 				tileControl.Move(new XY(x, tileY));
 				Grid[x, tileY] = new Tile(randomTileType, go, tileControl);
 				go.name = x + "/" + tileY;
-
+				go.tag = "Tile1";
 				NetworkServer.Spawn(go);
 			}
 		}

@@ -12,12 +12,26 @@ public class Player2Input : NetworkBehaviour
     public GameObject indicator;
 	public GameManager gameManager;
 	public Timer timer;
-	public PlayerNetwork playerNetwork;
+	public PlayerNetwork playerNetwork1;
+	public PlayerNetwork playerNetwork2;
     private GameObject go;
 
     void Awake()
     {
-		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+		// PlayerNetwork1 has the local authority, PlayerNetwork2 doesn't
+		playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork>();
+		if (!playerNetwork1.hasAuthority)
+		{
+			playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork> ();
+		}
+		else
+		{
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+		}
+			
+		playerNetwork1.player2 = this;
+		playerNetwork2.player2 = this;
         gridManager2 = GetComponent<GridManager2>();
 		timer.TimesUp += new EventHandler (TimesUpHandler);
     }
@@ -25,22 +39,46 @@ public class Player2Input : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (playerNetwork.IsServerAndLocal ())
+		if (playerNetwork1.IsServerAndLocal())
 			return;
 		
 		if (Input.GetKeyDown(KeyCode.Mouse1) && timer.Second >= 0.8f &&
 			!gameManager.coverImage1.IsActive () && !gameManager.uiManager.backgroundImage.IsActive())
         {
-            if (activeTile == null)
-                SelectTile();
-            else
-                AttemptMove();
+			if (activeTile == null)
+			{
+				SelectTile ();
+			}
+			else
+			{
+				GameObject tileToSwap = null;
+				NetworkIdentity swapTileNetworkID = null;
+				NetworkIdentity activeTileNetworkID = activeTile.GetComponent<NetworkIdentity> ();
+				Ray ray = GameObject.Find("Player2Camera").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+				RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 50f, Tiles);
+
+				// Get the tile to swap network ID
+				if (hit)
+				{
+					tileToSwap = hit.collider.gameObject;
+					swapTileNetworkID = tileToSwap.GetComponent<NetworkIdentity> ();
+
+				}
+
+				// Send the IDs to the server
+				if (swapTileNetworkID != null && activeTileNetworkID != null)
+				{
+					playerNetwork1.CmdAttempMove (activeTileNetworkID, swapTileNetworkID);
+					activeTile = null;
+					Destroy (go);
+				}
+			}
         }
     }
 
     // Tries to select a tile if the players left-clicks and no other tile is selected.
     void SelectTile()
-    {
+    {		
         Ray ray = GameObject.Find("Player2Camera").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 50f, Tiles);
         if (hit)
@@ -50,29 +88,24 @@ public class Player2Input : NetworkBehaviour
         }
     }
 
-    //tries to select and move a tile if the player left-clicks and another tile has already been selected
-    void AttemptMove()
+    //tries to select and move a tile if the player right-clicks and another tile has already been selected
+	public void AttemptMove(NetworkIdentity activeTileNetworkID, NetworkIdentity tileToSwapNetworkID)
     {
-        Ray ray = GameObject.Find("Player2Camera").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.GetRayIntersection(ray, 50f, Tiles);
-        if (hit)
-        {
-            if (Vector2.Distance(activeTile.transform.position, hit.collider.gameObject.transform.position) <= 1.25f)
-            {
-                TileControl2 activeControl = activeTile.GetComponent<TileControl2>();
-                TileControl2 hitControl = hit.collider.gameObject.GetComponent<TileControl2>();
+		GameObject activeTileServer = NetworkServer.FindLocalObject (activeTileNetworkID.netId);
+		GameObject tileToSwapServer = NetworkServer.FindLocalObject (tileToSwapNetworkID.netId);
+		if (Vector2.Distance (activeTileServer.transform.position, tileToSwapServer.transform.position) <= 1.25f)
+		{
+			TileControl2 activeControl = activeTileServer.GetComponent<TileControl2> ();
+			TileControl2 hitControl = tileToSwapServer.GetComponent<TileControl2> ();
 
-                GridManager2.XY2 activeXY = activeControl.MyXY2;
-                GridManager2.XY2 hitXY = hitControl.MyXY2;
+			GridManager2.XY2 activeXY = activeControl.MyXY2;
+			GridManager2.XY2 hitXY = hitControl.MyXY2;
 
-                activeControl.Move2(hitXY);
-                hitControl.Move2(activeXY);
+			activeControl.Move2 (hitXY);
+			hitControl.Move2 (activeXY);
 
-                gridManager2.SwitchTiles(hitXY, activeXY);
-            }
-            activeTile = null;
-            Destroy(go);
-        }
+			gridManager2.SwitchTiles (hitXY, activeXY);
+		}
     }
 
 	/// <summary>
