@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System;
 using System.Collections;
 
@@ -19,6 +20,7 @@ public class GolemAttack : EnemyAttack
 	/// <summary>
 	/// Count the number of ice shards when hit.
 	/// </summary>
+	[SyncVar]
 	private int iceCount;
 
 	/// <summary>
@@ -29,12 +31,20 @@ public class GolemAttack : EnemyAttack
 	/// <summary>
 	/// Indicate if the boss is frozen or not.
 	/// </summary>
+	[SyncVar(hook = "OnIsFrozen")]
 	private bool isFrozen;
 
 	/// <summary>
 	/// Indicate if the attak is physical attack or meteor.
 	/// </summary>
+	[SyncVar]
 	private bool usePhysicalAttack;
+
+	/// <summary>
+	/// The player network.
+	/// </summary>
+	private PlayerNetwork playerNetwork1;
+	private PlayerNetwork playerNetwork2;
 
 	/// <summary>
 	/// Boss's roar.
@@ -60,6 +70,16 @@ public class GolemAttack : EnemyAttack
 		set { reduceAttackDamage = value; }
 	}
 
+	/// <summary>
+	/// Gets or sets a value indicating whether this instance is in motion.
+	/// </summary>
+	/// <value><c>true</c> if this instance is in motion; otherwise, <c>false</c>.</value>
+	public bool IsInMotion
+	{
+		get { return isInMotion; }
+		set { isInMotion = value; }
+	}
+
 	#endregion
 
 	#region Private Methods
@@ -67,6 +87,21 @@ public class GolemAttack : EnemyAttack
 	// Use this for initialization
 	void Start ()
 	{
+		// PlayerNetwork1 has the local authority, PlayerNetwork2 doesn't
+		playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork>();
+		if (!playerNetwork1.hasAuthority)
+		{
+			playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork> ();
+		}
+		else
+		{
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+		}
+
+		playerNetwork1.golemAttack = this;
+		playerNetwork2.golemAttack = this;
+
 		reduceAttackDamage = 0.0f;
 		isFrozen = false;
 		usePhysicalAttack = true;
@@ -80,7 +115,7 @@ public class GolemAttack : EnemyAttack
 		meteorsAttack = gameObject.GetComponent<MeteorsAttack> ();
 		roarAudio = gameObject.GetComponent<AudioSource> ();
 
-		//timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.EventTimesUp += TimesUpHandler;
 	}
 
 	// Update is called once per frame
@@ -120,8 +155,17 @@ public class GolemAttack : EnemyAttack
 			{
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
-				isInMotion = true;
-				//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+				timer.SetTimerText ();
+
+				if (isServer)
+				{
+					isInMotion = true;
+					timer.OnTimesUp (!gameManager.isPlayerTurn);
+				}
+				else
+				{
+					isInMotion = false;
+				}
 			}
 		}
 	}
@@ -138,21 +182,30 @@ public class GolemAttack : EnemyAttack
 		anim.Play ("hit2");
 
 		yield return new WaitForSeconds(0.4f);
-		playerHealth.CmdReceiveDamage (Constants.BossDamage - reduceAttackDamage);
+		playerHealth.ReceiveDamage (Constants.GolemDamage - reduceAttackDamage);
 	}
 
 	/// <summary>
 	/// Switch turn coroutine.
 	/// </summary>
-	/// <returns>The boss coroutine.</returns>
-	private IEnumerator SwitchTurnCoroutine()
-	{
+	/// <returns>The switch turn coroutine.</returns>
+	private IEnumerator SwitchTurnCoroutine(float timeToWait)
+	{		
 		// After 7.5 seconds, switch turn
-		yield return new WaitForSeconds (7.5f);
+		yield return new WaitForSeconds (timeToWait);
 		timer.Second = Constants.TimeLimit;
 		timer.StopTimer = false;
-		isInMotion = true;
-		//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+		timer.SetTimerText ();
+
+		if (isServer)
+		{
+			isInMotion = true;
+			timer.OnTimesUp (!gameManager.isPlayerTurn);
+		}
+		else
+		{
+			isInMotion = false;
+		}
 	}
 
 	/// <summary>
@@ -189,12 +242,17 @@ public class GolemAttack : EnemyAttack
 		if (!isFrozen)
 		{
 			StartCoroutine (RoarCoroutine ());
-			meteorsAttack.SummonMeteors ();
+
+			// Only let the server spawns the meteors
+			if (isServer)
+			{
+				meteorsAttack.SummonMeteors ();
+			}
 
 			yield return new WaitForSeconds (1.2f);
 
 			// Switch turn
-			StartCoroutine (SwitchTurnCoroutine ());
+			StartCoroutine (SwitchTurnCoroutine (7.0f));
 		}
 	}
 
@@ -213,12 +271,12 @@ public class GolemAttack : EnemyAttack
 		else if (other.gameObject.tag == "Rock" && gameManager.isPlayerTurn)
 		{
 			// Reduce the boss's attack damage
-			reduceAttackDamage = (usePhysicalAttack) ? Constants.BossDamage / 2 : Constants.MeteorDamage / 2;
+			reduceAttackDamage = Constants.GolemDamage / 2;
 
 			// Display the spell effect
 			gameManager.uiManager.DisplaySpellEffect (Constants.EarthSpike);
 
-			// Deal damage to player
+			// Deal damage to golem
 			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
 			golemHealth.ReceiveDamage (playerAttack.Score * Constants.EarthSpikeDamage);
 		}
@@ -226,6 +284,7 @@ public class GolemAttack : EnemyAttack
 		{
 			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
 			golemHealth.ReceiveDamage (playerAttack.Score * Constants.IceShardDamage);
+
 			Destroy (other.gameObject);
 
 			iceCount++;
@@ -233,8 +292,8 @@ public class GolemAttack : EnemyAttack
 			// Display spell effect after the last ice shard is destroyed and make boss frozen
 			if (iceCount == 10)
 			{
-				// Only freeeze the boss if its HP is above 0
-				if (golemHealth.CurrentHealth > 0.0f)
+				// Only freeeze the boss if its HP is above 0 and if it's the server
+				if (golemHealth.CurrentHealth > 0.0f && isServer)
 				{
 					iceCount = 0;
 					isFrozen = true;
@@ -245,7 +304,7 @@ public class GolemAttack : EnemyAttack
 				gameManager.uiManager.DisplaySpellEffect (Constants.IceShard);
 
 				// Switch turn
-				StartCoroutine (SwitchTurnCoroutine ());
+				StartCoroutine (SwitchTurnCoroutine (7.8f));
 			}
 		}
 	}
@@ -257,28 +316,23 @@ public class GolemAttack : EnemyAttack
 	/// <param name="e">E.</param>
 	protected override void TimesUpHandler(bool isPlayerTurn)
 	{
-
-		// If next turn is the enemy's turn, then make enemy attack
-		if (!isPlayerTurn)
+		// For client
+		if (!isServer)
 		{
-			// Randomly choose an attack
-			float rand = UnityEngine.Random.value;
-			if (rand <= 0.3)
+			if (isPlayerTurn)
 			{
-				usePhysicalAttack = false;
-				StartCoroutine (MeteorsAttackCoroutine ());
+				isInMotion = false;
 			}
 			else
 			{
-				usePhysicalAttack = true;
 				isInMotion = true;
 			}
+			return;
 		}
-		else
-		{
-			isInMotion = false;
-			reduceAttackDamage = 0.0f;
-		}
+
+		// For server
+		usePhysicalAttack = true;
+		isInMotion = !isInMotion;
 
 		// Unfreeze the boss when the next turn is player's
 		if (isPlayerTurn && isFrozen)
@@ -286,6 +340,17 @@ public class GolemAttack : EnemyAttack
 			isFrozen = false;
 			frozenIce.SetActive (false);
 		}
+
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="b">If set to <c>true</c> b.</param>
+	private void OnIsFrozen(bool b)
+	{
+		isFrozen = b;
+		frozenIce.gameObject.SetActive (b);
 	}
 
 	#endregion

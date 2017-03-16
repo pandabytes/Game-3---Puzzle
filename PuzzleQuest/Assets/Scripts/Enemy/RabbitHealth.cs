@@ -32,6 +32,10 @@ public class RabbitHealth : EnemyHealth
 
 	#region Getters and Setters 
 
+	/// <summary>
+	/// Gets the current health.
+	/// </summary>
+	/// <value>The current health.</value>
 	public override float CurrentHealth 
 	{
 		get { return rabbitCurrentHealth; }
@@ -113,7 +117,7 @@ public class RabbitHealth : EnemyHealth
 			StartCoroutine (ReceiveDamageCoroutine (damage));
 		}
 
-		if (rabbitCurrentHealth <= 0.0f)
+		if (rabbitCurrentHealth <= 0.0f && isServer)
 		{
 			// Notify the game manager that this enemy has been defeated
 			OnEnemyDefeated (this, EventArgs.Empty);

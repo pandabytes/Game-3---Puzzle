@@ -95,7 +95,7 @@ public class RabbitAttack : EnemyAttack
 		isInMotion = false;
 
 		yield return new WaitForSeconds(0.03f);
-		playerHealth.CmdReceiveDamage (Constants.EnemyDamage - reduceAttackDamage);
+		playerHealth.ReceiveDamage (Constants.RabbitDamage - reduceAttackDamage);
 		reduceAttackDamage = 0.0f;
 	}
 
@@ -114,7 +114,7 @@ public class RabbitAttack : EnemyAttack
 		else if (other.gameObject.tag == "Rock" && gameManager.isPlayerTurn)
 		{
 			// Display the spell effect
-			reduceAttackDamage = Constants.EnemyDamage / 2;
+			reduceAttackDamage = Constants.RabbitDamage / 2;
 			gameManager.uiManager.DisplaySpellEffect (Constants.EarthSpike);
 
 			PlayerAttack playerAttack = player.GetComponent<PlayerAttack>();
@@ -124,4 +124,3 @@ public class RabbitAttack : EnemyAttack
 
 	#endregion
 }
-

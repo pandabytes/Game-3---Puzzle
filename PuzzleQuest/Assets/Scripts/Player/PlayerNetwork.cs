@@ -6,6 +6,7 @@ public class PlayerNetwork : NetworkBehaviour
 {
 	public Player2Input player2;
 	public PlayerAttack playerAttack;
+	public GolemAttack golemAttack;
 
 	// Use this for initialization
 	void Start ()
@@ -21,7 +22,7 @@ public class PlayerNetwork : NetworkBehaviour
 		
 		if (Input.GetKeyDown (KeyCode.S))
 		{
-			Debug.Log ("Local Player: " + isLocalPlayer + ", Server: " + isServer);
+			Debug.Log ("Local Player: " + isLocalPlayer + ", Server: " + isServer + ", Ready: ");
 		}
 	}
 
@@ -33,19 +34,35 @@ public class PlayerNetwork : NetworkBehaviour
 	[Command]
 	public void CmdAttempMove(NetworkIdentity activeTileNetworkID, NetworkIdentity tileToSwapNetworkID)
 	{
-		object t = this;
 		player2.AttemptMove (activeTileNetworkID, tileToSwapNetworkID);
 	}
 
 	/// <summary>
-	/// Rpcs the execute attack.
+	/// 
 	/// </summary>
 	/// <param name="attackName">Attack name.</param>
+	/// <param name="playerNetworkID">Player network ID.</param>
 	[ClientRpc]
-	public void RpcExecuteAttack(string attackName, NetworkIdentity playerNetworkID)
+	public void RpcPlayerAttack(string attackName, NetworkIdentity playerNetworkID)
 	{
-		object t = this;
 		playerAttack.ClientAttack (attackName, playerNetworkID);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="usePhysicalAttack">If set to <c>true</c> use physical attack.</param>
+	/// <param name="golemNetworkID">Golem network ID.</param>
+	[ClientRpc]
+	public void RpcGolemAttack(bool usePhysicalAttack, NetworkIdentity golemNetworkID)
+	{
+		//golemAttack.ClientAttack (usePhysicalAttack, golemNetworkID);
+	}
+
+	[ClientRpc]
+	public void RpcUnfreezeTime(float timeScale)
+	{
+		Time.timeScale = timeScale;
 	}
 
 	/// <summary>

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class IceShardsAttack : MonoBehaviour
+public class IceShardsAttack : NetworkBehaviour
 {
 	public GameObject iceShardsPrefab;
 	public AudioSource iceShatterSound;
@@ -12,13 +13,13 @@ public class IceShardsAttack : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Unleashs ice shards.
+	/// Unleash ice shards.
+	/// Instantiate in the server.
 	/// </summary>
 	public void UnleashIce()
 	{
 		iceShatterSound.Play ();
 
-		float yRot = transform.rotation.eulerAngles.y;
 		Vector3 forward = transform.forward;
 		Vector3 right = transform.right;
 		Vector3 up = transform.up;
@@ -32,6 +33,8 @@ public class IceShardsAttack : MonoBehaviour
 
 		Rigidbody rigidBody = iceShards.GetComponent<Rigidbody> ();
 		rigidBody.velocity = Vector3.right * 10.0f;
+
+		NetworkServer.Spawn (iceShards);
 	}
 }
 

@@ -21,12 +21,22 @@ public static class Constants
 	/// <summary>
 	/// The enemy damage.
 	/// </summary>
-	public const float EnemyDamage = 22.0f;
+	public const float EnemyDamage = 18.0f;
+
+	/// <summary>
+	/// The slime damage.
+	/// </summary>
+	public const float SlimeDamage = 23.0f;
+
+	/// <summary>
+	/// The rabbit damage.
+	/// </summary>
+	public const float RabbitDamage = 28.0f;
 
 	/// <summary>
 	/// The boss damage.
 	/// </summary>
-	public const float BossDamage = 26.0f;
+	public const float GolemDamage = 33.0f;
 
 	/// <summary>
 	/// The meteor damage.
@@ -46,12 +56,12 @@ public static class Constants
 	/// <summary>
 	/// The earth spike damage.
 	/// </summary>
-	public const float EarthSpikeDamage = 1.7f;
+	public const float EarthSpikeDamage = 1.5f;
 
 	/// <summary>
 	/// The ice shard damage.
 	/// </summary>
-	public const float IceShardDamage = 0.15f;
+	public const float IceShardDamage = 0.2f;
 
 	#endregion
 
@@ -125,7 +135,7 @@ public static class Constants
 	/// <summary>
 	/// THe amount of HP recovered from healing
 	/// </summary>
-	public const float HealAmount = 0.7f;
+	public const float HealAmount = 0.8f;
 
 	/// <summary>
 	/// The time limit.

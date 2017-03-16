@@ -40,7 +40,7 @@ public class EnemyAttack : NetworkBehaviour
 	/// <summary>
 	/// Flag indicate whether enemy is in motion (aka moving).
 	/// </summary>
-	[SyncVar]
+
 	protected bool isInMotion;
 
 	/// <summary>
@@ -135,7 +135,7 @@ public class EnemyAttack : NetworkBehaviour
 		anim.Play ("Attack");
 
 		yield return new WaitForSeconds(0.3f);
-		playerHealth.CmdReceiveDamage (Constants.EnemyDamage);
+		playerHealth.ReceiveDamage (Constants.EnemyDamage);
 	}
 
 	/// <summary>
@@ -159,7 +159,7 @@ public class EnemyAttack : NetworkBehaviour
 	protected virtual void TimesUpHandler(bool isPlayerTurn)
 	{
 		// For client
-		if (isClient)
+		if (!isServer)
 		{
 			if (isPlayerTurn)
 			{

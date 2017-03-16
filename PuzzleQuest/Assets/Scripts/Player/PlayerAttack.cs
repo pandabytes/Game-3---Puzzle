@@ -117,7 +117,7 @@ public class PlayerAttack : NetworkBehaviour
 	/// <param name="stage">Stage.</param>
 	private string ChooseAttack(StageEnum stage)
 	{
-		int rand = UnityEngine.Random.Range (1, 11);
+		int rand = UnityEngine.Random.Range (1, 101);
 
 		if (stage == StageEnum.FirstStage)
 		{
@@ -125,24 +125,24 @@ public class PlayerAttack : NetworkBehaviour
 		}
 		else if (stage == StageEnum.SecondStage)
 		{
-			return (rand <= 5) ? Constants.FireBall : Constants.PhysicalAttack;
+			return (rand <= 50) ? Constants.FireBall : Constants.PhysicalAttack;
 		}
 		else if (stage == StageEnum.ThirdStage)
 		{
-			if (rand >= 5)
+			if (rand >= 50)
 				return Constants.PhysicalAttack;
-			else if (rand == 3 || rand == 4)
+			else if (rand >= 30 && rand < 50)
 				return Constants.FireBall;
 			else
 				return Constants.EarthSpike;
 		}
 		else
 		{
-			if (rand >= 4)
+			if (rand >= 60)
 				return Constants.PhysicalAttack;
-			else if (rand == 1)
+			else if (rand >= 1 && rand < 30)
 				return Constants.FireBall;
-			else if (rand == 2)
+			else if (rand >= 31 && rand < 50)
 				return Constants.EarthSpike;
 			else
 				return Constants.IceShard;
@@ -167,7 +167,7 @@ public class PlayerAttack : NetworkBehaviour
 
 		// Client attacks
 		NetworkIdentity playerNetworkID = gameObject.GetComponent<NetworkIdentity>();
-		playerNetwork1.RpcExecuteAttack(attackName, playerNetworkID);
+		playerNetwork1.RpcPlayerAttack(attackName, playerNetworkID);
 
 		// Server attacks
 		if (attackName == Constants.PhysicalAttack)
@@ -196,8 +196,10 @@ public class PlayerAttack : NetworkBehaviour
 
 	#endregion
 
+	#region Public Methods
+
 	/// <summary>
-	/// This will run on Client so to perform the same attack as server does
+	/// This will run on Client so to perform the same attack as server's
 	/// </summary>
 	/// <param name="attackName">Attack name.</param>
 	/// <param name="playerNetworkID">Player network ID.</param>
@@ -211,20 +213,21 @@ public class PlayerAttack : NetworkBehaviour
 		else if (attackName == Constants.FireBall)
 		{
 			playerServer.GetComponent<Animation> ().Play ("Attack");
-			FireBallAttack fireBallSpell = playerServer.GetComponent<FireBallAttack> ();
-			fireBallSpell.ShootFireBall ();
 		}
 		else if (attackName == Constants.EarthSpike)
 		{
-			anim.Play ("Attack");
-			EarthSpikeAttack earthSpikeSpell = playerServer.GetComponent<EarthSpikeAttack>();
+			playerServer.GetComponent<Animation> ().Play ("Attack");
+			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
 			earthSpikeSpell.RaiseRocks ();
 		}
 		else
 		{
-			anim.Play ("Attack");
+			// Only need to play the sound effect in the client
+			playerServer.GetComponent<Animation> ().Play ("Attack");
 			IceShardsAttack iceShardSpell = playerServer.GetComponent<IceShardsAttack> ();
-			iceShardSpell.UnleashIce ();
+			iceShardSpell.iceShatterSound.Play ();
 		}
 	}
+
+	#endregion
 }

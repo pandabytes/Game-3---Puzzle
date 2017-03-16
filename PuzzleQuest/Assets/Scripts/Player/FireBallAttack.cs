@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using DigitalRuby.PyroParticles;
 using System.Collections;
 
-public class FireBallAttack : MonoBehaviour
+public class FireBallAttack : NetworkBehaviour
 {
 	private GameObject fireBallObject;
 	private FireBaseScript fireBallScript;
@@ -57,6 +58,8 @@ public class FireBallAttack : MonoBehaviour
 
 		fireBallObject.transform.position = pos;
 		fireBallObject.transform.rotation = rotation;
+
+		NetworkServer.Spawn (fireBallObject);
 	}
 
 	/// <summary>

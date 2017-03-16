@@ -26,10 +26,7 @@ public class EarthSpikeAttack : NetworkBehaviour
 	/// </summary>
 	/// <returns>The rocks.</returns>
 	private IEnumerator RaiseRocksCoroutine()
-	{
-		if (!isServer)
-			yield break;
-		
+	{		
 		Animation anim_1 = rock_1.GetComponent<Animation> ();
 		Animation anim_2 = rock_2.GetComponent<Animation> ();
 		Animation anim_3 = rock_3.GetComponent<Animation> ();

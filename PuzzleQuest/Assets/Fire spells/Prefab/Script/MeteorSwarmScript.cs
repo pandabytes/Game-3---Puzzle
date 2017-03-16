@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -133,6 +134,7 @@ namespace DigitalRuby.PyroParticles
                     audio.PlayOneShot(clip, scale);
                 }
             }
+			NetworkServer.Spawn (meteor);
         }
 
         private void SpawnMeteors()
@@ -170,7 +172,8 @@ namespace DigitalRuby.PyroParticles
 
             int index = UnityEngine.Random.Range(0, ExplosionSounds.Length);
             AudioClip clip = ExplosionSounds[index];
-            s.PlayOneShot(clip, obj.transform.localScale.x);
+            //s.PlayOneShot(clip, obj.transform.localScale.x);
+			s.PlayOneShot(clip, 0.2f);
         }
 
         private IEnumerator CleanupMeteor(float delay, GameObject obj)
@@ -210,7 +213,7 @@ namespace DigitalRuby.PyroParticles
 			if (col.gameObject.tag == "Player")
 			{
 				PlayerHealth playerHealth = col.gameObject.GetComponent<PlayerHealth> ();
-				playerHealth.CmdReceiveDamage (Constants.MeteorDamage - golemAttack.ReduceAttackDamage);
+				playerHealth.ReceiveDamage (Constants.MeteorDamage - golemAttack.ReduceAttackDamage);
 			}
 
             MeteorExplosionParticleSystem.transform.position = pos;

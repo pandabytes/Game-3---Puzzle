@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
 namespace DigitalRuby.PyroParticles
@@ -17,7 +18,7 @@ namespace DigitalRuby.PyroParticles
         public float Maximum;
     }
 
-    public class FireBaseScript : MonoBehaviour
+    public class FireBaseScript : NetworkBehaviour
     {
         [Tooltip("Optional audio source to play once when the script starts.")]
         public AudioSource AudioSource;
@@ -54,7 +55,8 @@ namespace DigitalRuby.PyroParticles
             // 2 extra seconds just to make sure animation and graphics have finished ending
             yield return new WaitForSeconds(StopTime + 2.0f);
 
-            GameObject.Destroy(gameObject);
+            //GameObject.Destroy(gameObject);
+			NetworkServer.Destroy(gameObject);
         }
 
         private void StartParticleSystems()

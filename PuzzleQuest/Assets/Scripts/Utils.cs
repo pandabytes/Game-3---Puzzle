@@ -11,11 +11,8 @@ public class Utils : NetworkBehaviour
 	/// </summary>
 	public GameState gameState;
 
-	public PlayerNetwork playerNetwork;
-
 	void Start()
 	{
-		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 	}
 
 	/// <summary>
@@ -23,21 +20,29 @@ public class Utils : NetworkBehaviour
 	/// </summary>
 	public void Replay()
 	{
+		if (!isServer)
+			return;
+		
+		LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
 		if (gameState.stage == StageEnum.FirstStage)
 		{
-			SceneManager.LoadScene ("Stage 1");	
+			if (GameObject.FindGameObjectWithTag ("Music") != null)
+			{
+				Destroy (GameObject.FindGameObjectWithTag ("Music"));
+			}
+			lobbyManager.ServerChangeScene ("Stage 1");
 		}
 		else if (gameState.stage == StageEnum.SecondStage)
 		{
-			SceneManager.LoadScene ("Stage 2");	
+			lobbyManager.ServerChangeScene ("Stage 2");
 		}
 		else if (gameState.stage == StageEnum.ThirdStage)
 		{
-			SceneManager.LoadScene ("Stage 3");	
+			lobbyManager.ServerChangeScene ("Stage 3");
 		}
 		else if (gameState.stage == StageEnum.FourthStage)
 		{
-			SceneManager.LoadScene ("Stage 4");	
+			lobbyManager.ServerChangeScene ("Stage 4");
 		}
 	}
 
@@ -47,13 +52,16 @@ public class Utils : NetworkBehaviour
 	public void PlayFromBeginning()
 	{
 		// Only server can start the game
-		//playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-
 		if (isServer)
 		{
 			gameState.stage = StageEnum.FirstStage;
+			if (GameObject.FindGameObjectWithTag ("Music") != null)
+			{
+				Destroy (GameObject.FindGameObjectWithTag ("Music"));
+			}
+
 			LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
-			lobbyManager.ServerChangeScene ("Stage 3");
+			lobbyManager.ServerChangeScene ("Stage 1");
 		}
 	}
 
@@ -62,8 +70,11 @@ public class Utils : NetworkBehaviour
 	/// </summary>
 	public void Quit()
 	{
-		gameState.stage = StageEnum.FirstStage;
-		Application.Quit ();
+		if (isServer)
+		{
+			gameState.stage = StageEnum.FirstStage;
+			Application.Quit ();
+		}
 	}
 }
 

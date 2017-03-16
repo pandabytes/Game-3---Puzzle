@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using Prototype.NetworkLobby;
 
 public class PlayerHealth : NetworkBehaviour 
 {
@@ -160,7 +161,12 @@ public class PlayerHealth : NetworkBehaviour
 
 		// After 0.5 second, load the game over scene
 		yield return new WaitForSeconds (0.5f);
-		SceneManager.LoadScene ("GameOver");
+
+		if (isServer)
+		{
+			LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+			lobbyManager.ServerChangeScene ("GameOver");
+		}
 	}
 
 	/// <summary>
@@ -204,7 +210,7 @@ public class PlayerHealth : NetworkBehaviour
 	/// Receives the damage.
 	/// </summary>
 	/// <param name="damage">Damage amount.</param>
-	public void CmdReceiveDamage(float damage)
+	public void ReceiveDamage(float damage)
 	{
 		if (!isServer)
 			return; 

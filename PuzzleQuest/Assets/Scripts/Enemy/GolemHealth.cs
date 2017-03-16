@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System;
 using System.Collections;
 
 public class GolemHealth : EnemyHealth
 {
 	#region Member variables
+
+	/// <summary>
+	/// The golem full health.
+	/// </summary>
+	public float golemFullHealth;
+
+	/// <summary>
+	/// The golem current health.
+	/// </summary>
+	[SyncVar(hook = "OnCurrentHealth")]
+	public float golemCurrentHealth;
 
 	/// <summary>
 	/// The original material of the enemy.
@@ -18,12 +30,25 @@ public class GolemHealth : EnemyHealth
 
 	#endregion
 
+	#region Getters and Setters 
+
+	/// <summary>
+	/// Gets the current health.
+	/// </summary>
+	/// <value>The current health.</value>
+	public override float CurrentHealth 
+	{
+		get { return golemCurrentHealth; }
+	}
+
+	#endregion
+
 	#region Private Methods
 
 	// Use this for initialization
 	void Start () 
 	{
-		currentHealth = fullHealth;
+		golemCurrentHealth = golemFullHealth;
 		anim = gameObject.GetComponent<Animation> ();
 	}
 
@@ -32,7 +57,7 @@ public class GolemHealth : EnemyHealth
 	/// </summary>
 	void Update()
 	{
-		if (currentHealth > 0.0f && !(anim.IsPlaying ("hit2") || anim.IsPlaying ("damage") || anim.IsPlaying ("walk") || anim.IsPlaying("rage")))
+		if (golemCurrentHealth > 0.0f && !(anim.IsPlaying ("hit2") || anim.IsPlaying ("damage") || anim.IsPlaying ("walk") || anim.IsPlaying("rage")))
 			anim.Play ("idle");
 	}
 
@@ -46,8 +71,15 @@ public class GolemHealth : EnemyHealth
 		// Set to damage color/texture
 		model.GetComponent<Renderer>().material.mainTexture = damageTexture;
 
-		currentHealth = (currentHealth - damage < 0.0f) ? 0.0f : currentHealth - damage;
-		float scaledDamage = currentHealth / fullHealth;
+		if (!isServer)
+		{
+			yield return new WaitForSeconds(0.1f);
+			model.GetComponent<Renderer> ().material.mainTexture = originalTexture;
+			yield break;
+		}
+
+		golemCurrentHealth = (golemCurrentHealth - damage < 0.0f) ? 0.0f : golemCurrentHealth - damage;
+		float scaledDamage = golemCurrentHealth / golemFullHealth;
 		SetHealth (scaledDamage);
 
 		// Reset enemy color/texture afer 0.1 second
@@ -73,6 +105,22 @@ public class GolemHealth : EnemyHealth
 		gameObject.SetActive (false);
 	}
 
+	/// <summary>
+	/// Call this when current health is changed on the server.
+	/// Update the health bar on the client side.
+	/// </summary>
+	/// <param name="c">C.</param>
+	protected override void OnCurrentHealth(float c)
+	{
+		golemCurrentHealth = c;
+		SetHealth (golemCurrentHealth / golemFullHealth);
+
+		if (golemCurrentHealth <= 0.0f)
+		{
+			StartCoroutine (EnemyDeathCoroutine ());
+		}
+	}
+
 	#endregion
 
 	#region Public Methods
@@ -83,14 +131,14 @@ public class GolemHealth : EnemyHealth
 	/// <param name="damage">Damage.</param>
 	public override void ReceiveDamage(float damage)
 	{
-		if (currentHealth > 0.0f)
+		if (golemCurrentHealth > 0.0f)
 		{
 			anim.Stop ();
 			anim.Play ("damage");
 			StartCoroutine (ReceiveDamageCoroutine (damage));
 		}
 
-		if (currentHealth <= 0.0f)
+		if (golemCurrentHealth <= 0.0f && isServer)
 		{
 			StartCoroutine (EnemyDeathCoroutine ());
 		}

@@ -148,11 +148,11 @@ public class EnemyHealth : NetworkBehaviour
 	/// <param name="c">C.</param>
 	protected virtual void OnCurrentHealth(float c)
 	{
-		if (c < currentHealth)
-		{
-			anim.Stop ();
-			anim.Play ("Damage");
-		}
+//		if (c < currentHealth)
+//		{
+//			anim.Stop ();
+//			anim.Play ("Damage");
+//		}
 
 		currentHealth = c;
 		SetHealth (currentHealth / fullHealth);
@@ -180,7 +180,7 @@ public class EnemyHealth : NetworkBehaviour
 			StartCoroutine (ReceiveDamageCoroutine (damage));
 		}
 
-		if (currentHealth <= 0.0f)
+		if (currentHealth <= 0.0f && isServer)
 		{
 			StartCoroutine (EnemyDeathCoroutine ());
 		}

@@ -90,7 +90,7 @@ public class SlimeAttack : EnemyAttack
 		isInMotion = false;
 
 		yield return new WaitForSeconds(0.03f);
-		playerHealth.CmdReceiveDamage (Constants.EnemyDamage);
+		playerHealth.ReceiveDamage (Constants.SlimeDamage);
 	}
 
 	/// <summary>

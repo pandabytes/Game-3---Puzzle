@@ -113,7 +113,7 @@ public class SlimeHealth : EnemyHealth
 			StartCoroutine (ReceiveDamageCoroutine (damage));
 		}
 
-		if (slimeCurrentHealth <= 0.0f)
+		if (slimeCurrentHealth <= 0.0f && isServer)
 		{
 			// Notify the game manager that this enemy has been defeated
 			OnEnemyDefeated (this, EventArgs.Empty);

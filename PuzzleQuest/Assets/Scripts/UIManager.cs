@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
+using Prototype.NetworkLobby;
 
 public class UIManager : NetworkBehaviour
 {
@@ -128,27 +129,29 @@ public class UIManager : NetworkBehaviour
 	{
 		if (!isServer)
 			return;
-		
-		Time.timeScale = savedTimeScale;
+
 		popUpWindow.gameObject.SetActive (false);
 		okButton.gameObject.SetActive (false);
 		message.gameObject.SetActive (false);
 
 		// Only server can change scene
+		LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+
 		switch (stage)
 		{
 			case (StageEnum.FirstStage):
-				SceneManager.LoadScene ("Stage 2");
+				lobbyManager.ServerChangeScene ("Stage 2");
 				break;
 			case (StageEnum.SecondStage):
-				SceneManager.LoadScene ("Stage 3");
+				lobbyManager.ServerChangeScene ("Stage 3");
 				break;
 			case (StageEnum.ThirdStage):
 				Destroy (GameObject.FindGameObjectWithTag ("Music"));
-				SceneManager.LoadScene ("Stage 4");
+				lobbyManager.ServerChangeScene ("Stage 4");
 				break;
 			case (StageEnum.FourthStage):
-				SceneManager.LoadScene ("Win");
+				Destroy (GameObject.FindGameObjectWithTag ("Music"));
+				lobbyManager.ServerChangeScene ("Win");
 				break;
 		}
 	}
@@ -210,8 +213,6 @@ public class UIManager : NetworkBehaviour
 	/// </summary>
 	public void EnablePopUpWindow()
 	{
-		savedTimeScale = Time.timeScale;
-		Time.timeScale = 0.0f;
 		popUpWindow.gameObject.SetActive (true);
 		okButton.gameObject.SetActive (true);
 		message.gameObject.SetActive (true);
@@ -237,4 +238,3 @@ public class UIManager : NetworkBehaviour
 
 	#endregion
 }
-
