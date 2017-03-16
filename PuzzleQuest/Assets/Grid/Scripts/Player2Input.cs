@@ -12,8 +12,8 @@ public class Player2Input : NetworkBehaviour
     public GameObject indicator;
 	public GameManager gameManager;
 	public Timer timer;
-	public PlayerNetwork playerNetwork1;
-	public PlayerNetwork playerNetwork2;
+	private PlayerNetwork playerNetwork1;
+	private PlayerNetwork playerNetwork2;
     private GameObject go;
 
     void Awake()
@@ -33,7 +33,9 @@ public class Player2Input : NetworkBehaviour
 		playerNetwork1.player2 = this;
 		playerNetwork2.player2 = this;
         gridManager2 = GetComponent<GridManager2>();
-		timer.TimesUp += EventTimesUpHandler;
+
+		if (!isServer)
+			timer.EventTimesUp += TimesUpHandler;
     }
 
     // Update is called once per frame
@@ -114,7 +116,8 @@ public class Player2Input : NetworkBehaviour
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void EventTimesUpHandler(object isPlayerTurn, EventArgs e)
+	//private void TimesUpHandler(object sender, EventArgs e)
+	private void TimesUpHandler(bool isPlayerTurn)
 	{
 		if (activeTile != null)
 		{

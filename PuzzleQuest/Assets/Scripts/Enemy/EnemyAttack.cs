@@ -108,6 +108,7 @@ public class EnemyAttack : NetworkBehaviour
 			{
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
+				timer.SetTimerText ();
 
 				if (isServer)
 				{

@@ -46,22 +46,15 @@ public class Utils : NetworkBehaviour
 	/// </summary>
 	public void PlayFromBeginning()
 	{
-		if (GameObject.FindGameObjectWithTag("Lobby Player") == null)
-		{
-			Debug.Log ("Lobby player is NULL");
-			return;
-		}
-
 		// Only server can start the game
-		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
-		if (playerNetwork.IsServerAndLocal())
+		//playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
+
+		if (isServer)
 		{
 			gameState.stage = StageEnum.FirstStage;
 			LobbyManager lobbyManager = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
-			lobbyManager.ServerChangeScene ("Stage 1");
+			lobbyManager.ServerChangeScene ("Stage 3");
 		}
-
-		//SceneManager.LoadScene ("Stage 1");
 	}
 
 	/// <summary>

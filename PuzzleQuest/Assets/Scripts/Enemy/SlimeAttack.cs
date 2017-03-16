@@ -25,7 +25,7 @@ public class SlimeAttack : EnemyAttack
 		isInMotion = false;
 		slimeHealth = gameObject.GetComponent<SlimeHealth> ();
 
-		//timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.EventTimesUp += TimesUpHandler;
 	}
 	
 	// Update is called once per frame
@@ -43,11 +43,8 @@ public class SlimeAttack : EnemyAttack
 	/// </summary>
 	protected override void MoveTowardToPlayer()
 	{
-		if (isInMotion)
-		{
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
-		}
+		float step = speed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
 	}
 
 	/// <summary>
@@ -61,14 +58,24 @@ public class SlimeAttack : EnemyAttack
 			float step = 30 * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, startPosition, step);
 
-			// Send a notifcation to indicate that the enemy's turn has completed.
+			// Only server can send a notifcation to indicate that the enemy's turn has completed.
 			// Enemy doesn't need a countdown 
 			if (transform.position == startPosition)
 			{
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
-				isInMotion = true;
-				//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+				timer.SetTimerText ();
+
+				if (isServer)
+				{
+					isInMotion = true;
+					timer.OnTimesUp (!gameManager.isPlayerTurn);
+				}
+				else
+				{
+					isInMotion = false;
+				}
+
 			}
 		}
 	}

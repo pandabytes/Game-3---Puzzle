@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class EarthSpikeAttack : MonoBehaviour
+public class EarthSpikeAttack : NetworkBehaviour
 {
 	public GameObject rock_1;
 	public GameObject rock_2;
@@ -26,6 +27,9 @@ public class EarthSpikeAttack : MonoBehaviour
 	/// <returns>The rocks.</returns>
 	private IEnumerator RaiseRocksCoroutine()
 	{
+		if (!isServer)
+			yield break;
+		
 		Animation anim_1 = rock_1.GetComponent<Animation> ();
 		Animation anim_2 = rock_2.GetComponent<Animation> ();
 		Animation anim_3 = rock_3.GetComponent<Animation> ();

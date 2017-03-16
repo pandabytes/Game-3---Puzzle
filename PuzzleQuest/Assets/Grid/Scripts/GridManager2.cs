@@ -16,7 +16,7 @@ public class GridManager2 : NetworkBehaviour
 	public Text scoreText;
     public int distanceFromOtherBoard;
 	public Timer timer;
-	public PlayerNetwork playerNetwork;
+	private PlayerNetwork playerNetwork;
 
     //a simple class to handle the coordinates
     public class XY2

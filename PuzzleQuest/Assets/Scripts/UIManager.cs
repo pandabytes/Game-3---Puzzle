@@ -31,7 +31,6 @@ public class UIManager : NetworkBehaviour
 	[SyncVar]
 	public float time;
 
-	[SyncVar]
 	private bool gameStart;
 
 	// Pop up window

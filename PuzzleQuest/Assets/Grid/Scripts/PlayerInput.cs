@@ -5,21 +5,23 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class PlayerInput : NetworkBehaviour {
+public class PlayerInput : NetworkBehaviour
+{
 	private GridManager gridManager;
 	public LayerMask Tiles;
 	private GameObject activeTile;
     public GameObject indicator;
 	public GameManager gameManager;
 	public Timer timer;
-	public PlayerNetwork playerNetwork;
+	private PlayerNetwork playerNetwork;
     private GameObject go;
 
 	void Awake()
 	{
 		playerNetwork = GameObject.FindGameObjectWithTag ("Lobby Player").GetComponent<PlayerNetwork>();
 		gridManager = GetComponent<GridManager> ();
-		timer.TimesUp += EventTimesUpHandler;
+
+		timer.EventTimesUp += TimesUpHandler;
 	}
 
 	// Update is called once per frame
@@ -82,7 +84,8 @@ public class PlayerInput : NetworkBehaviour {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="e">E.</param>
-	private void EventTimesUpHandler(object isPlayerTurn, EventArgs e)
+	//private void TimesUpHandler(object sender, EventArgs e)
+	private void TimesUpHandler(bool isPlayerTurn)
 	{
 		if (activeTile != null)
 		{

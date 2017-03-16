@@ -31,7 +31,7 @@ public class RabbitAttack : EnemyAttack
 		isInMotion = false;
 		rabbitHealth = gameObject.GetComponent<RabbitHealth> ();
 
-		//timer.TimesUp += new EventHandler (TimesUpHandler);
+		timer.EventTimesUp += TimesUpHandler;
 	}
 
 	// Update is called once per frame
@@ -49,11 +49,8 @@ public class RabbitAttack : EnemyAttack
 	/// </summary>
 	protected override void MoveTowardToPlayer()
 	{
-		if (isInMotion)
-		{
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
-		}
+		float step = speed * Time.deltaTime;
+		transform.position = Vector3.MoveTowards (transform.position, player.transform.position, step);
 	}
 
 	/// <summary>
@@ -73,8 +70,17 @@ public class RabbitAttack : EnemyAttack
 			{
 				timer.Second = Constants.TimeLimit;
 				timer.StopTimer = false;
-				isInMotion = true;
-				//timer.OnTimesUp (!gameManager.isPlayerTurn, EventArgs.Empty);
+				timer.SetTimerText ();
+
+				if (isServer)
+				{
+					isInMotion = true;
+					timer.OnTimesUp (!gameManager.isPlayerTurn);
+				}
+				else
+				{
+					isInMotion = false;
+				}
 			}
 		}
 	}

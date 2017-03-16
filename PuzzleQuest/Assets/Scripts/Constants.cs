@@ -16,7 +16,7 @@ public static class Constants
 	/// <summary>
 	/// The physical damage.
 	/// </summary>
-	public const float PhysicalDamage = 25.0f;
+	public const float PhysicalDamage = 1.0f;
 
 	/// <summary>
 	/// The enemy damage.

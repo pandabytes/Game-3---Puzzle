@@ -75,7 +75,7 @@ public class Timer : NetworkBehaviour
 	/// <summary>
 	/// Sets the timer text.
 	/// </summary>
-	private void SetTimerText()
+	public void SetTimerText()
 	{
 		// Second format
 		if (second < 10)

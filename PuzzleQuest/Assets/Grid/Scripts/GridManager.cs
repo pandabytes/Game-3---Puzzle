@@ -15,7 +15,7 @@ public class GridManager : NetworkBehaviour
 
 	public Text scoreText;
 	public Timer timer;
-	public PlayerNetwork playerNetwork;
+	private PlayerNetwork playerNetwork;
 
 	//a simple class to handle the coordinates
 	public class XY

@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerNetwork : NetworkBehaviour
 {
 	public Player2Input player2;
+	public PlayerAttack playerAttack;
 
 	// Use this for initialization
 	void Start ()
@@ -34,6 +35,17 @@ public class PlayerNetwork : NetworkBehaviour
 	{
 		object t = this;
 		player2.AttemptMove (activeTileNetworkID, tileToSwapNetworkID);
+	}
+
+	/// <summary>
+	/// Rpcs the execute attack.
+	/// </summary>
+	/// <param name="attackName">Attack name.</param>
+	[ClientRpc]
+	public void RpcExecuteAttack(string attackName, NetworkIdentity playerNetworkID)
+	{
+		object t = this;
+		playerAttack.ClientAttack (attackName, playerNetworkID);
 	}
 
 	/// <summary>

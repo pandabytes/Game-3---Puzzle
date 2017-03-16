@@ -12,12 +12,12 @@ public class EnemyHealth : NetworkBehaviour
 	/// <summary>
 	/// Full health
 	/// </summary>
-	public float fullHealth;
+	protected float fullHealth;
 
 	/// <summary>
 	/// The current health.
 	/// </summary>
-	[SyncVar(hook = "OnCurrentHealth")]
+	[SyncVar(hook = "OnCurrentHealth"), ]
 	protected float currentHealth;
 
 	/// <summary>
@@ -58,7 +58,7 @@ public class EnemyHealth : NetworkBehaviour
 	/// Gets the current health.
 	/// </summary>
 	/// <value>The current health.</value>
-	public float CurrentHealth 
+	public virtual float CurrentHealth 
 	{
 		get { return currentHealth; }
 	}
@@ -70,6 +70,7 @@ public class EnemyHealth : NetworkBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		fullHealth = 100.0f;
 		currentHealth = fullHealth;
 		anim = gameObject.GetComponent<Animation> ();
 
@@ -105,6 +106,13 @@ public class EnemyHealth : NetworkBehaviour
 	{
 		// Set to damage color
 		model.GetComponent<Renderer> ().material.color = damageColor;
+
+		if (!isServer)
+		{
+			yield return new WaitForSeconds(0.1f);
+			model.GetComponent<Renderer> ().material = originalMaterial;
+			yield break;
+		}
 
 		currentHealth = (currentHealth - damage < 0.0f) ? 0.0f : currentHealth - damage;
 		float scaledDamage = currentHealth / fullHealth;
@@ -165,9 +173,6 @@ public class EnemyHealth : NetworkBehaviour
 	/// <param name="damage">Damage.</param>
 	public virtual void ReceiveDamage(float damage)
 	{
-		if (!isServer)
-			return;
-		
 		if (currentHealth > 0.0f)
 		{
 			anim.Stop ();

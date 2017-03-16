@@ -33,6 +33,12 @@ public class PlayerAttack : NetworkBehaviour
 	/// </summary>
 	private PlayerMovement playerMovement;
 
+	/// <summary>
+	/// The player network.
+	/// </summary>
+	private PlayerNetwork playerNetwork1;
+	private PlayerNetwork playerNetwork2;
+
 	#endregion
 
 	#region Getters and Setters
@@ -53,6 +59,21 @@ public class PlayerAttack : NetworkBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		// PlayerNetwork1 has the local authority, PlayerNetwork2 doesn't
+		playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork>();
+		if (!playerNetwork1.hasAuthority)
+		{
+			playerNetwork1 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [0].GetComponent<PlayerNetwork> ();
+		}
+		else
+		{
+			playerNetwork2 = GameObject.FindGameObjectsWithTag ("Lobby Player") [1].GetComponent<PlayerNetwork> ();
+		}
+
+		playerNetwork1.playerAttack = this;
+		playerNetwork2.playerAttack = this;
+
 		score = 0.0f;
 		anim = GetComponent<Animation> ();
 		playerMovement = gameObject.GetComponent<PlayerMovement> ();
@@ -104,7 +125,7 @@ public class PlayerAttack : NetworkBehaviour
 		}
 		else if (stage == StageEnum.SecondStage)
 		{
-			return (rand <= 3) ? Constants.FireBall : Constants.PhysicalAttack;
+			return (rand <= 5) ? Constants.FireBall : Constants.PhysicalAttack;
 		}
 		else if (stage == StageEnum.ThirdStage)
 		{
@@ -135,22 +156,31 @@ public class PlayerAttack : NetworkBehaviour
 	/// <param name="e">E.</param>
 	private void CmdAttackHandler(object sender, EventArgs e)
 	{
+		if (!isServer)
+			return;
+		
 		ScoreEventArgs scoreEvent = e as ScoreEventArgs;
 		score = scoreEvent.Score;
 		
 		// Randomly choose an attack
-		string attack = ChooseAttack (gameManager.stage);
-		if (attack == Constants.PhysicalAttack)
+		string attackName = ChooseAttack (gameManager.stage);
+
+		// Client attacks
+		NetworkIdentity playerNetworkID = gameObject.GetComponent<NetworkIdentity>();
+		playerNetwork1.RpcExecuteAttack(attackName, playerNetworkID);
+
+		// Server attacks
+		if (attackName == Constants.PhysicalAttack)
 		{
 			playerMovement.IsInMotion = true;
 		}
-		else if (attack == Constants.FireBall)
+		else if (attackName == Constants.FireBall)
 		{
 			anim.Play ("Attack");
 			FireBallAttack fireBallSpell = gameObject.GetComponent<FireBallAttack> ();
 			fireBallSpell.ShootFireBall ();
 		}
-		else if (attack == Constants.EarthSpike)
+		else if (attackName == Constants.EarthSpike)
 		{
 			anim.Play ("Attack");
 			EarthSpikeAttack earthSpikeSpell = gameObject.GetComponent<EarthSpikeAttack>();
@@ -165,4 +195,36 @@ public class PlayerAttack : NetworkBehaviour
 	}
 
 	#endregion
+
+	/// <summary>
+	/// This will run on Client so to perform the same attack as server does
+	/// </summary>
+	/// <param name="attackName">Attack name.</param>
+	/// <param name="playerNetworkID">Player network ID.</param>
+	public void ClientAttack(string attackName, NetworkIdentity playerNetworkID)
+	{
+		GameObject playerServer = ClientScene.FindLocalObject (playerNetworkID.netId);
+		if (attackName == Constants.PhysicalAttack)
+		{
+			playerServer.GetComponent<PlayerMovement> ().IsInMotion = true;
+		}
+		else if (attackName == Constants.FireBall)
+		{
+			playerServer.GetComponent<Animation> ().Play ("Attack");
+			FireBallAttack fireBallSpell = playerServer.GetComponent<FireBallAttack> ();
+			fireBallSpell.ShootFireBall ();
+		}
+		else if (attackName == Constants.EarthSpike)
+		{
+			anim.Play ("Attack");
+			EarthSpikeAttack earthSpikeSpell = playerServer.GetComponent<EarthSpikeAttack>();
+			earthSpikeSpell.RaiseRocks ();
+		}
+		else
+		{
+			anim.Play ("Attack");
+			IceShardsAttack iceShardSpell = playerServer.GetComponent<IceShardsAttack> ();
+			iceShardSpell.UnleashIce ();
+		}
+	}
 }

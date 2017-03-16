@@ -30,7 +30,6 @@ public class PlayerMovement : NetworkBehaviour
 	/// <summary>
 	/// Flag indicate whether player is in motion (aka moving).
 	/// </summary>
-	[SyncVar]
 	private bool isInMotion;
 
 	/// <summary>
