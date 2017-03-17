@@ -15,6 +15,8 @@ public class Utils : NetworkBehaviour
 	{
 	}
 
+	#region Public Methods
+
 	/// <summary>
 	/// Replay the game in whichever scene the players lose.
 	/// </summary>
@@ -30,18 +32,22 @@ public class Utils : NetworkBehaviour
 			{
 				Destroy (GameObject.FindGameObjectWithTag ("Music"));
 			}
+			SceneManager.LoadScene ("Stage 1");
 			lobbyManager.ServerChangeScene ("Stage 1");
 		}
 		else if (gameState.stage == StageEnum.SecondStage)
 		{
+			SceneManager.LoadScene ("Stage 2");
 			lobbyManager.ServerChangeScene ("Stage 2");
 		}
 		else if (gameState.stage == StageEnum.ThirdStage)
 		{
+			SceneManager.LoadScene ("Stage 3");
 			lobbyManager.ServerChangeScene ("Stage 3");
 		}
 		else if (gameState.stage == StageEnum.FourthStage)
 		{
+			SceneManager.LoadScene ("Stage 4");
 			lobbyManager.ServerChangeScene ("Stage 4");
 		}
 	}
@@ -76,5 +82,7 @@ public class Utils : NetworkBehaviour
 			Application.Quit ();
 		}
 	}
+
+	#endregion
 }
 

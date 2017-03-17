@@ -105,7 +105,6 @@ public class GolemAttack : EnemyAttack
 		reduceAttackDamage = 0.0f;
 		isFrozen = false;
 		usePhysicalAttack = true;
-		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
 
 		startPosition = transform.position;
@@ -354,4 +353,5 @@ public class GolemAttack : EnemyAttack
 	}
 
 	#endregion
+
 }

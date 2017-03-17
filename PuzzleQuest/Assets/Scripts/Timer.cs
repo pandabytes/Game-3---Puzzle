@@ -87,7 +87,7 @@ public class Timer : NetworkBehaviour
 			secondText = ((int)second).ToString ();
 		}
 			
-		timeText.text = string.Format (timeFormat, secondText);
+		timeText.text = secondText;
 	}
 
 	#endregion

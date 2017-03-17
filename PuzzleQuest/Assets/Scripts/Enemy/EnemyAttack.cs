@@ -25,7 +25,7 @@ public class EnemyAttack : NetworkBehaviour
 	/// <summary>
 	/// The player object.
 	/// </summary>
-	protected GameObject player;
+	public GameObject player;
 
 	/// <summary>
 	/// The player health.
@@ -60,7 +60,6 @@ public class EnemyAttack : NetworkBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
 
 		startPosition = transform.position;

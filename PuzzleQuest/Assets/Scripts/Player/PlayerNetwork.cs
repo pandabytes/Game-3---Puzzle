@@ -49,29 +49,17 @@ public class PlayerNetwork : NetworkBehaviour
 	}
 
 	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="usePhysicalAttack">If set to <c>true</c> use physical attack.</param>
-	/// <param name="golemNetworkID">Golem network ID.</param>
-	[ClientRpc]
-	public void RpcGolemAttack(bool usePhysicalAttack, NetworkIdentity golemNetworkID)
-	{
-		//golemAttack.ClientAttack (usePhysicalAttack, golemNetworkID);
-	}
-
-	[ClientRpc]
-	public void RpcUnfreezeTime(float timeScale)
-	{
-		Time.timeScale = timeScale;
-	}
-
-	/// <summary>
 	/// Determines whether this instance is server and local.
 	/// </summary>
 	/// <returns><c>true</c> if this instance is server and local; otherwise, <c>false</c>.</returns>
 	public bool IsServerAndLocal()
 	{
 		return isLocalPlayer && isServer;
+	}
+
+	public override void OnDeserialize(NetworkReader reader, bool initialState)
+	{
+		base.OnDeserialize(reader, initialState);
 	}
 }
 

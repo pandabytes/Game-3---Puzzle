@@ -16,6 +16,7 @@ public class GridManager2 : NetworkBehaviour
 	public Text scoreText;
     public int distanceFromOtherBoard;
 	public Timer timer;
+	public GameManager gameManager;
 	private PlayerNetwork playerNetwork;
 
     //a simple class to handle the coordinates
@@ -191,7 +192,15 @@ public class GridManager2 : NetworkBehaviour
 
 		if (tilesToDestroy.Count != 0)
 		{
-			AddScore (tilesToDestroy.Count);	
+			if (gameManager.coverImage2.gameObject.activeSelf)
+			{
+				score = 0;
+				scoreString = score.ToString ();
+			}
+			else
+			{
+				AddScore (tilesToDestroy.Count);
+			}
 			DestroyMatches (tilesToDestroy);
 		}
 		else

@@ -15,6 +15,7 @@ public class GridManager : NetworkBehaviour
 
 	public Text scoreText;
 	public Timer timer;
+	public GameManager gameManager;
 	private PlayerNetwork playerNetwork;
 
 	//a simple class to handle the coordinates
@@ -72,7 +73,6 @@ public class GridManager : NetworkBehaviour
 		
 		CreateGrid ();
 		CheckMatches ();
-		//timer.TimesUp += new SY.EventHandler (TimesUpHandler);
 	}
 
 	/// <summary>
@@ -206,7 +206,15 @@ public class GridManager : NetworkBehaviour
 
 		if (tilesToDestroy.Count != 0)
 		{
-			AddScore (tilesToDestroy.Count);
+			if (gameManager.coverImage1.gameObject.activeSelf)
+			{
+				score = 0;
+				scoreString = score.ToString ();
+			}
+			else
+			{
+				AddScore (tilesToDestroy.Count);
+			}
 			DestroyMatches (tilesToDestroy);
 		}
 		else
@@ -241,7 +249,6 @@ public class GridManager : NetworkBehaviour
 	private void TimesUpHandler(object sender, SY.EventArgs e)
 	{
 		// Do not deal damage is score is <= 0
-		Debug.Log("attack score: " + score.ToString());
 		if (score > 0)
 		{
 			ScoreEventArgs scoreEvent = new ScoreEventArgs ((float) score);

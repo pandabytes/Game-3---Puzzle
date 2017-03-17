@@ -139,18 +139,22 @@ public class UIManager : NetworkBehaviour
 
 		switch (stage)
 		{
-			case (StageEnum.FirstStage):
+		case (StageEnum.FirstStage):
+				SceneManager.LoadScene ("Stage 2");
 				lobbyManager.ServerChangeScene ("Stage 2");
 				break;
 			case (StageEnum.SecondStage):
+				SceneManager.LoadScene ("Stage 3");
 				lobbyManager.ServerChangeScene ("Stage 3");
 				break;
 			case (StageEnum.ThirdStage):
-				Destroy (GameObject.FindGameObjectWithTag ("Music"));
+				if (GameObject.FindGameObjectWithTag ("Music") != null) Destroy (GameObject.FindGameObjectWithTag ("Music"));
+				SceneManager.LoadScene ("Stage 4");
 				lobbyManager.ServerChangeScene ("Stage 4");
 				break;
 			case (StageEnum.FourthStage):
-				Destroy (GameObject.FindGameObjectWithTag ("Music"));
+				if (GameObject.FindGameObjectWithTag ("Music") != null) Destroy (GameObject.FindGameObjectWithTag ("Music"));
+				SceneManager.LoadScene ("Win");
 				lobbyManager.ServerChangeScene ("Win");
 				break;
 		}

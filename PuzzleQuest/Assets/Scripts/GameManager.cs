@@ -66,6 +66,11 @@ public class GameManager : NetworkBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		if (!isServer && !ClientScene.ready)
+		{
+			ClientScene.Ready (this.connectionToServer);
+		}
+
 		isEnemyDead = false;
 		EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth> ();
 		enemyHealth.EnemyDefeated += new EventHandler (EnemyDefeatedHandler);

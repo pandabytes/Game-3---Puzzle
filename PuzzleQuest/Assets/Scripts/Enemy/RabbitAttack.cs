@@ -24,7 +24,6 @@ public class RabbitAttack : EnemyAttack
 	void Start ()
 	{
 		reduceAttackDamage = 0.0f;
-		player = GameObject.FindGameObjectWithTag("Player");
 		playerHealth = player.GetComponent<PlayerHealth> ();
 
 		startPosition = transform.position;

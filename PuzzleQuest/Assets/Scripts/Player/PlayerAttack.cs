@@ -140,9 +140,9 @@ public class PlayerAttack : NetworkBehaviour
 		{
 			if (rand >= 60)
 				return Constants.PhysicalAttack;
-			else if (rand >= 1 && rand < 30)
+			else if (rand >= 1 && rand < 20)
 				return Constants.FireBall;
-			else if (rand >= 31 && rand < 50)
+			else if (rand >= 21 && rand < 40)
 				return Constants.EarthSpike;
 			else
 				return Constants.IceShard;
